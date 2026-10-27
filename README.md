@@ -2,7 +2,7 @@
 
 Klikbare keuzehulp bij de vraag: *mag ik dit werk op CollectieNederland.nl tonen?*
 
-De keuzehulp volgt het stroomdiagram van de RCE en de toelichting uit het rapport ‘Auteursrecht x CollectieNederland’. Daarna krijg je een uitkomst met de reden, de vervolgstappen en eventuele signalen over het rechtenveld.
+De keuzehulp volgt het stroomdiagram van de RCE en de toelichting uit het rapport ‘Auteursrecht x CollectieNederland’, de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollecties (Rbr). Daarna krijg je een uitkomst met de reden, de vervolgstappen en eventuele signalen over het rechtenveld.
 
 ## Opbouw
 
@@ -15,9 +15,9 @@ De keuzehulp heeft twee delen.
 3. Is het werk publiek domein? Dan volgt de vraag of de afbeelding een plat werk laat zien of een 3D-object. Bij een 3D-object kan de foto eigen rechten van de fotograaf hebben.
 4. Staat er een CC-licentie? Dan volgt de vraag of de rechthebbende die zelf heeft gegeven.
 
-**Deel 2 · Stroomdiagram RCE**: dit deel is ongewijzigd.
+**Deel 2 · Stroomdiagram RCE**: het stroomdiagram, met één toegevoegde keuze in de eerste vraag: embedden met eigen thumbnails. Volgens de Q&A zijn eigen thumbnails het grootste risico, dus daarvoor vraagt de keuzehulp naar toestemming.
 
-1. Hoe ga je het werk tonen: embedden of framen, of zelf hosten?
+1. Hoe ga je het werk tonen: embedden of framen, embedden met eigen thumbnails, of zelf hosten?
 2. Toont de bronhouder het werk zelf op diens eigen website?
 3. Heeft de bronhouder maatregelen genomen om embedding tegen te houden?
 4. Heeft de bronhouder een overeenkomst met Pictoright?
@@ -37,7 +37,7 @@ Welke vragen je krijgt, hangt af van je antwoorden.
 | Niet embedden | De bronhouder heeft maatregelen genomen om embedding tegen te houden. |
 | Niet tonen | Er is geen toestemming en het werk staat niet vrij online. |
 
-Bij elke uitkomst staan het risico voor RCE, de juridische grondslag en wat je daarna doet. Klopt het rechtenveld volgens je antwoorden niet, dan staat er ook een **signaal voor het rechtenveld**. Een voorbeeld: het veld zegt publiek domein, maar het werk is nog beschermd. Met **Kopieer advies** neem je de route, de uitkomst en de signalen als tekst over, bijvoorbeeld voor een mail of ticket.
+Bij elke uitkomst staan het risico voor RCE, de juridische grondslag en wat je daarna doet. Klopt het rechtenveld volgens je antwoorden niet, dan staat er ook een **signaal voor het rechtenveld**. Een voorbeeld: het veld zegt publiek domein, maar het werk is nog beschermd. De grondslag is de toelichting bij art. 2.2 Rbr: bij rijkscollecties horen auteurs- en gebruiksrechten bij de registratie. Met **Kopieer advies** neem je de route, de uitkomst en de signalen als tekst over, bijvoorbeeld voor een mail of ticket.
 
 ## Rechtenstatements vertaald
 
@@ -73,4 +73,4 @@ Open `index.html` in een browser. De lettertypen komen van Google Fonts. Zonder 
 
 ## Let op
 
-De keuzehulp geeft richting bij de keuze, maar is geen juridisch advies voor een concreet werk. Deel 1 en de tabel met rechtenstatements gaan verder dan het officiële stroomdiagram. Laat ze nalezen door een jurist voordat de keuzehulp breed gebruikt wordt. Twijfel je over een concreet werk, overleg dan met een jurist.
+De keuzehulp geeft richting bij de keuze, maar is geen juridisch advies voor een concreet werk. Deel 1, de keuze voor eigen thumbnails en de tabel met rechtenstatements gaan verder dan het officiële stroomdiagram. Laat ze nalezen door een jurist voordat de keuzehulp breed gebruikt wordt. Twijfel je over een concreet werk, overleg dan met een jurist.

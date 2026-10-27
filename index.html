@@ -242,6 +242,7 @@ button { font: inherit; color: inherit; }
 }
 .signals h3 { font-size: 1rem; font-weight: 600; color: var(--warn); }
 .signals ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.signals .basis { font-size: .88rem; color: var(--muted); }
 
 .why h3, .next h3 { font-size: 1.1rem; margin-bottom: 8px; font-weight: 600; }
 .why p { max-width: 68ch; }
@@ -426,7 +427,8 @@ footer {
       <div><dt>Hyperlink</dt><dd>Een gewone link naar de bron, zonder het werk te tonen. Linken naar rechtmatig online geplaatst materiaal mag vrijwel altijd.</dd></div>
       <div><dt>Hosten</dt><dd>Het bestand staat op een server van RCE. Dat is verveelvoudiging en openbaarmaking: daarvoor is toestemming nodig, en RCE is zelf aansprakelijk.</dd></div>
       <div><dt>Cachen</dt><dd>Een tijdelijke, ongewijzigde kopie voor een technisch proces, die daarna weer wordt gewist. Dat mag. Een cache om later aan bezoekers te tonen mag niet zonder afspraken.</dd></div>
-      <div><dt>Thumbnail</dt><dd>Een verkleinde kopie. Zelf thumbnails maken en opslaan is een bewerking en verveelvoudiging, dus toestemming nodig (HvJ EU, VG Bild-Kunst, C-392/19).</dd></div>
+      <div><dt>Thumbnail</dt><dd>Een verkleinde kopie. Zelf thumbnails maken en opslaan is een bewerking en verveelvoudiging, dus toestemming nodig (HvJ EU, VG Bild-Kunst, C-392/19). Een thumbnail die bij het opvragen wordt gemaakt en daarna verdwijnt, is caching.</dd></div>
+      <div><dt>MediaManager</dt><dd>De huidige opslag van beelden bij de leverancier van Collectie Nederland. Beelden daaruit overzetten naar een eigen omgeving is een verveelvoudiging, en daarna host RCE ze.</dd></div>
       <div><dt>Bronhouder</dt><dd>De instelling die de collectiegegevens en beelden levert, meestal via het NDE-datasetregister.</dd></div>
       <div><dt>Rechthebbende</dt><dd>De maker of diens erfgenamen of vertegenwoordiger. Alleen de rechthebbende kan toestemming geven of een CC-licentie toekennen.</dd></div>
       <div><dt>Pictoright</dt><dd>Auteursrechtorganisatie voor beeldmakers. Haar overeenkomsten met instellingen beperken of verbieden vaak het embedden door derden.</dd></div>
@@ -439,7 +441,7 @@ footer {
   </section>
 
   <footer>
-    <p>Gebaseerd op het stroomdiagram en het rapport ‘Auteursrecht x CollectieNederland’ (RCE). Deel 1, over welke rechten het gaat en wat er in het rechtenveld staat, is een aanvulling op het stroomdiagram op basis van hetzelfde rapport.</p>
+    <p>Gebaseerd op het stroomdiagram en het rapport ‘Auteursrecht x CollectieNederland’ (RCE), de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollecties (Rbr). Deel 1, over welke rechten het gaat en wat er in het rechtenveld staat, en de keuze voor eigen thumbnails zijn aanvullingen op het stroomdiagram.</p>
     <p>De keuzehulp geeft richting bij de keuze. Twijfel je over een concreet werk, overleg dan met een jurist.</p>
   </footer>
 </div>
@@ -448,6 +450,9 @@ footer {
 // Peiljaar voor publiek domein: auteursrecht loopt tot 1 januari, 70 jaar na het sterfjaar.
 const Y = new Date().getFullYear();
 const PD = Y - 71;
+
+// Waarom alleen de beschrijving tonen verdedigbaar is
+const ERFGOEDWET = "Alleen de beschrijving tonen is verdedigbaar. Art. 2.2 Erfgoedwet vraagt de toegankelijkheid te bevorderen; dat is een inspanningsverplichting. De aansluitplicht uit art. 2.2 Rbr gaat over de registratie, niet over het tonen van afbeeldingen.";
 
 const N = {
   // Deel 1: welke rechten, en wat staat er in het rechtenveld?
@@ -520,12 +525,15 @@ const N = {
     answers: [
       { label: "Ik ga het werk embedden of framen", short: "embedden / framen", to: "q2",
         hint: "Het bestand blijft bij de bronhouder. De browser van de bezoeker haalt het daar op." },
+      { label: "Ik embed het beeld, maar sla eigen thumbnails op", short: "eigen thumbnails", to: "q5", jumpLast: true,
+        hint: "Het grote beeld komt van de bronhouder, de verkleinde versies staan op een server van RCE." },
       { label: "Ik host het zelf", short: "zelf hosten", to: "q5",
-        hint: "Er komt een kopie op een server van RCE. Dat geldt ook voor zelf gemaakte thumbnails." }
+        hint: "Er komt een kopie op een server van RCE. Ook beelden overzetten uit de MediaManager naar een eigen omgeving is hosten." }
     ],
     help: `<p><strong>Embedden en framen:</strong> het werk staat niet op servers van RCE. De bezoeker haalt het rechtstreeks bij de bronhouder op, dus RCE verricht zelf geen auteursrechtelijke handeling.</p>
-      <p><strong>Hosten:</strong> RCE maakt een kopie en zet die online. Dat is verveelvoudiging en openbaarmaking, waarvoor toestemming nodig is. Zelf thumbnails maken en opslaan valt hier ook onder.</p>
-      <p class="tip">Kort cachen tijdens een technisch proces, waarna het bestand weer verdwijnt, telt niet als hosten.</p>`
+      <p><strong>Eigen thumbnails:</strong> een verkleinde kopie maken en opslaan is verveelvoudiging en bewerking, ook als je het grote beeld embedt (HvJ EU, VG Bild-Kunst, C-392/19). Volgens de Q&A bij het rapport is dit het grootste risico: één probleem raakt meteen alle thumbnails.</p>
+      <p><strong>Hosten:</strong> RCE maakt een kopie en zet die online. Dat is verveelvoudiging en openbaarmaking, waarvoor toestemming nodig is.</p>
+      <p class="tip">Kort cachen tijdens een technisch proces, waarna het bestand weer verdwijnt, telt niet als hosten. Een thumbnail die op het moment van opvragen wordt gemaakt en daarna weer verdwijnt, ook niet.</p>`
   },
   q2: {
     type: "q", phase: 2,
@@ -564,7 +572,8 @@ const N = {
         hint: "Geen overeenkomst bekend." }
     ],
     help: `<p>Pictoright-overeenkomsten bevatten vaak afspraken over embedden door derden. De digitaliseringsovereenkomst tussen Pictoright en RCE eist bijvoorbeeld dat downloaden en embedden door derden wordt verhinderd.</p>
-      <p>Bronhouders weten niet altijd wat er in hun overeenkomst staat. Daarom is ‘ja’ een reden om eerst na te vragen.</p>`
+      <p>Bronhouders weten niet altijd wat er in hun overeenkomst staat. Daarom is ‘ja’ een reden om eerst na te vragen.</p>
+      <p class="tip">Gaat het om de RCE-Kunstcollectie? De huidige overeenkomst met Pictoright geldt alleen voor de Beeldbank. Of de Beeldbank in Collectie Nederland geëmbed mag worden, moet eerst met Pictoright worden afgestemd.</p>`
   },
   q5: {
     type: "q", phase: 2,
@@ -578,7 +587,8 @@ const N = {
     ],
     help: `<p>Zonder toestemming geen hosting. Toestemming komt uit een overeenkomst met de bronhouder of rechthebbende, of uit een Creative Commons-licentie.</p>
       <p>Alleen de rechthebbende mag een CC-licentie toekennen. Een Rights Statement zoals <em>InCopyright</em> beschrijft alleen de rechtenstatus en geeft geen toestemming.</p>
-      <p class="tip">Ga je thumbnails opslaan? Dan moet de toestemming daar ook expliciet over gaan.</p>`
+      <p class="tip">Ga je thumbnails opslaan? Dan moet de toestemming daar ook expliciet over gaan.</p>
+      <p class="tip">Host RCE op verzoek van de bronhouder, met een aansluitovereenkomst? Dan kan RCE zich mogelijk beroepen op de hostingvrijstelling (art. 6 DSA). Die vereist onder meer dat de leverancier niet onder gezag of toezicht van het platform staat. Of dat opgaat voor rijksmusea is onzeker, omdat de Rbr hen verplicht aan te sluiten op het systeem van de minister. Ga daar niet zonder juridisch advies van uit.</p>`
   },
 
   // Uitkomsten van deel 1
@@ -621,7 +631,8 @@ const N = {
     next: [
       "Vraag de bronhouder of de overeenkomst embedden door derden toestaat, en onder welke voorwaarden.",
       "Is embedden beperkt toegestaan? Maak bij het beeld duidelijk dat Collectie Nederland het niet zelf host, bijvoorbeeld met ‘Beeld afkomstig van [website bronhouder]’.",
-      "Geen duidelijk antwoord? Toon dan alleen de beschrijving, met een link naar de pagina van de bronhouder."
+      "Geen duidelijk antwoord? Toon dan alleen de beschrijving, met een link naar de pagina van de bronhouder.",
+      "Gaat het om de RCE-Kunstcollectie? Neem eerst contact op met Pictoright. Reken op een doorlooptijd van zes maanden tot twee jaar als er een nieuwe overeenkomst nodig is."
     ]
   },
   r_low: {
@@ -633,6 +644,7 @@ const N = {
     why: () => "Het werk staat vrij toegankelijk op de site van de bronhouder en er is geen blokkade. RCE maakt dan geen eigen kopie en verricht geen auteursrechtelijke handeling. Staat het werk toch onrechtmatig online, dan is in de eerste plaats de bronhouder aansprakelijk.",
     next: [
       "Embed of frame het werk rechtstreeks vanaf de bronhouder.",
+      "Laat de bronhouder bevestigen dat embedden mag, bijvoorbeeld in de aansluitovereenkomst. Vraag daarbij of er afspraken met Pictoright of de rechthebbende zijn die embedden verbieden.",
       "Sla geen eigen kopie of thumbnail op. Dan host je het werk en heb je toestemming nodig.",
       "Haal de link onverwijld weg als er een melding van inbreuk binnenkomt.",
       "Zijn er aanwijzingen dat het werk onrechtmatig online staat? Embed het dan niet."
@@ -648,6 +660,7 @@ const N = {
     next: [
       "Omzeil de maatregel niet, ook niet door een eigen kopie of thumbnail te maken.",
       "Toon de beschrijving met een gewone link naar de pagina van de bronhouder. Linken naar rechtmatig online materiaal mag vrijwel altijd.",
+      ERFGOEDWET,
       "Wil je het beeld toch tonen? Vraag toestemming aan de rechthebbende en loop de keuzehulp opnieuw door via ‘zelf hosten’."
     ]
   },
@@ -657,11 +670,15 @@ const N = {
     title: "Je mag het werk niet tonen.",
     risk: "Hoog, als je het toch toont",
     basis: "Auteurswet: zonder toestemming geen verveelvoudiging of openbaarmaking",
-    why: (steps) => viaEmbed(steps)
+    why: () => viaEmbed()
       ? "De bronhouder toont het werk niet zelf vrij toegankelijk online. Er is dus niets rechtmatig openbaars om naar te verwijzen, en zonder toestemming van de rechthebbende mag je het niet tonen."
+      : viaThumbs()
+      ? "Een thumbnail die RCE zelf maakt en opslaat is een verveelvoudiging, ook als het grote beeld geëmbed wordt. Zonder toestemming is dat een inbreuk, en een probleem raakt dan meteen alle thumbnails. Volgens de Q&A bij het rapport is dit het grootste risico."
       : "Bij zelf hosten maakt RCE een kopie en zet die online. Zonder toestemming is dat een inbreuk, en RCE is daar zelf volledig voor aansprakelijk.",
     next: [
       "Toon alleen de beschrijving (metadata), zonder beeld.",
+      ERFGOEDWET,
+      "Wil je toch een beeld bij de zoekresultaten? Embed dan ook de kleine versie bij de bronhouder, of laat thumbnails op het moment van opvragen maken zonder ze op te slaan.",
       "Vraag toestemming aan de rechthebbende, eventueel via de bronhouder.",
       "Komt het werk later wel vrij online bij de bronhouder? Loop de keuzehulp dan opnieuw door."
     ]
@@ -672,8 +689,10 @@ const N = {
     title: "Je mag het werk tonen.",
     risk: "Laag, als de toestemming vastligt",
     basis: "Toestemming van de rechthebbende (overeenkomst of CC-licentie)",
-    why: (steps) => viaEmbed(steps)
+    why: () => viaEmbed()
       ? "De bronhouder toont het werk niet zelf openbaar, maar je hebt toestemming van de rechthebbende. Die toestemming moet het tonen op Collectie Nederland echt dekken."
+      : viaThumbs()
+      ? "Met toestemming van de rechthebbende mag RCE eigen thumbnails maken en opslaan, en het grote beeld embedden. De toestemming moet de thumbnails expliciet noemen: dat is een verveelvoudiging en bewerking."
       : "Met toestemming van de rechthebbende mag RCE het werk zelf hosten en tonen. RCE verricht dan zelf de verveelvoudiging en openbaarmaking, dus de toestemming moet het gebruik op Collectie Nederland echt dekken.",
     next: [
       "Leg de toestemming vast: de overeenkomst, of de licentie met een link naar de bron.",
@@ -690,7 +709,7 @@ const EDGES = {
   "p2>q1": { ex: 595, side: "l", ly: 250 },
   "p3>q1": { ex: 555, side: "l", ly: 362 },
   "p4>q1": { ex: 725, ly: 320 },
-  "q1>q5": { ex: 860 },
+  "q1>q5": { ex: 860, side: "l", ly: 508 },
   "q2>q5": { ex: 750 },
   "q5>r_show": { ex: 890 },
   "q5>r_no_show": { ex: 700 }
@@ -724,22 +743,28 @@ const pickOf = (id) => { const s = steps.find((x) => x.id === id); return s ? s.
 const ARROW = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 function viaEmbed() { return pickOf("q1") === 0; }
+function viaThumbs() { return pickOf("q1") === 1; }
 
 function displayMode() {
   const m = pickOf("q1");
   if (m === null) return null;
-  if (m === 1) return "Zelf hosten";
+  if (m === 1) return "Embedden, met eigen thumbnails";
+  if (m === 2) return "Zelf hosten";
   if (pickOf("q2") === 1) return "Embedden of framen (bron niet openbaar online)";
   return "Embedden of framen";
 }
 
-// Waarom je in het stroomdiagram zit, als deel 1 daar iets over zegt
-function context() {
-  if (pickOf("p3") === 1) return "Het object is publiek domein, maar de foto ervan kan een eigen auteursrecht hebben. Je bepaalt nu de rechten op de foto: met ‘rechthebbende’ wordt hier de fotograaf bedoeld.";
-  if (pickOf("p2") === 2) return "Je weet niet of het werk publiek domein is, dus je behandelt het als beschermd.";
-  if (pickOf("p4") === 1) return "De CC-licentie in het rechtenveld is onzeker, dus je behandelt het werk als beschermd.";
-  return null;
+// Waarom je op deze plek in het stroomdiagram zit
+function contexts() {
+  const out = [];
+  if (pickOf("p3") === 1) out.push("Het object is publiek domein, maar de foto ervan kan een eigen auteursrecht hebben. Je bepaalt nu de rechten op de foto: met ‘rechthebbende’ wordt hier de fotograaf bedoeld.");
+  if (pickOf("p2") === 2) out.push("Je weet niet of het werk publiek domein is, dus je behandelt het als beschermd.");
+  if (pickOf("p4") === 1) out.push("De CC-licentie in het rechtenveld is onzeker, dus je behandelt het werk als beschermd.");
+  if (viaThumbs()) out.push("Het grote beeld embed je, maar voor de thumbnails die je zelf opslaat heb je toestemming nodig.");
+  return out;
 }
+
+const SIGNAL_BASIS = "Bij rijkscollecties horen auteurs- en gebruiksrechten bij de registratie die de beheerder actueel moet houden (toelichting bij art. 2.2 Rbr). Herstel van het rechtenveld brengt volgens de Q&A bij het rapport zelf geen juridisch risico mee.";
 
 // Wat er volgens je antwoorden niet klopt aan het rechtenveld
 function signals() {
@@ -790,7 +815,9 @@ function jumpTo(id) {
     if (last.id === id) { steps = path; return render(true); }
     const node = N[last.id];
     if (node.type !== "q") continue;
-    node.answers.forEach((a, i) => {
+    const order = node.answers.map((a, i) => i).sort((i, j) => !!node.answers[i].jumpLast - !!node.answers[j].jumpLast);
+    order.forEach((i) => {
+      const a = node.answers[i];
       if (path.some((s) => s.id === a.to)) return;
       const copy = path.map((s) => ({ ...s }));
       copy[copy.length - 1].pick = i;
@@ -816,7 +843,7 @@ function renderStage() {
   void stage.offsetWidth;
   stage.style.animation = "";
   const reachedPhase2 = steps.some((s) => N[s.id].phase === 2);
-  const ctx = reachedPhase2 ? context() : null;
+  const ctx = (reachedPhase2 ? contexts() : []).map((c) => `<p class="context">${c}</p>`).join("");
 
   if (node.type === "q") {
     const n = steps.filter((s) => N[s.id].phase === node.phase).length;
@@ -826,7 +853,7 @@ function renderStage() {
         ${phaseChips(node.phase, false)}
       </div>
       <h2 id="stage-h" tabindex="-1">${node.q}</h2>
-      ${node.phase === 2 && ctx ? `<p class="context">${ctx}</p>` : ""}
+      ${node.phase === 2 ? ctx : ""}
       <div class="answers">
         ${node.answers.map((a, i) => `
           <button class="answer" type="button" data-i="${i}">
@@ -852,7 +879,7 @@ function renderStage() {
         ${phaseChips(reachedPhase2 ? 2 : 1, true)}
       </div>
       <h2 id="stage-h" tabindex="-1">${node.title}</h2>
-      ${ctx ? `<p class="context">${ctx}</p>` : ""}
+      ${ctx}
       <div class="label-card tone-${node.tone}">
         <div class="bar"></div>
         <dl class="meta">
@@ -861,7 +888,7 @@ function renderStage() {
           <div><dt>Grondslag</dt><dd>${node.basis}</dd></div>
         </dl>
       </div>
-      ${sig.length ? `<div class="signals"><h3>Signaal voor het rechtenveld</h3><ul>${sig.map((s) => `<li>${s}</li>`).join("")}</ul></div>` : ""}
+      ${sig.length ? `<div class="signals"><h3>Signaal voor het rechtenveld</h3><ul>${sig.map((s) => `<li>${s}</li>`).join("")}</ul><p class="basis">${SIGNAL_BASIS}</p></div>` : ""}
       <div class="why"><h3>Waarom</h3><p>${node.why(steps)}</p></div>
       <div class="next"><h3>Wat nu</h3><ul>${node.next.map((n) => `<li>${n}</li>`).join("")}</ul></div>
       <div class="nav-row">
@@ -983,13 +1010,16 @@ function adviceText() {
     if (n.type === "q" && s.pick !== null) lines.push(`- ${n.q} → ${n.answers[s.pick].label}`);
   });
   lines.push("", `Uitkomst: ${node.stamp}. ${node.title}`);
-  const ctx = context();
-  if (ctx && steps.some((s) => N[s.id].phase === 2)) lines.push(`Let op: ${ctx}`);
+  if (steps.some((s) => N[s.id].phase === 2)) contexts().forEach((c) => lines.push(`Let op: ${c}`));
   const mode = displayMode();
   if (mode) lines.push(`Vertoning: ${mode}`);
   lines.push(`Risico voor RCE: ${node.risk}`, `Grondslag: ${node.basis}`);
   const sig = signals();
-  if (sig.length) { lines.push("", "Signaal voor het rechtenveld:"); sig.forEach((s) => lines.push(`- ${s}`)); }
+  if (sig.length) {
+    lines.push("", "Signaal voor het rechtenveld:");
+    sig.forEach((s) => lines.push(`- ${s}`));
+    lines.push(SIGNAL_BASIS);
+  }
   lines.push("", `Waarom: ${node.why(steps)}`, "", "Wat nu:");
   node.next.forEach((n) => lines.push(`- ${n}`));
   lines.push("", "Bron: stroomdiagram en rapport ‘Auteursrecht x CollectieNederland’ (RCE).");
