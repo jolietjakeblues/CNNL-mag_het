@@ -59,6 +59,7 @@ body {
 }
 h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.12; }
 p { margin: 0; }
+code { font-family: var(--f-mono); font-size: .88em; padding: 1px 5px; border-radius: 4px; background: var(--paper); border: 1px solid var(--line); }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 
@@ -78,7 +79,7 @@ button { font: inherit; color: inherit; }
 .chip {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 4px 12px 4px 10px; border-radius: 999px;
-  font-size: 13px; font-weight: 600; border: 1px solid transparent;
+  font-size: 13px; font-weight: 600; border: 1px solid transparent; white-space: nowrap;
 }
 .chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 .tone-ok { color: var(--ok); background: var(--ok-soft); }
@@ -107,12 +108,29 @@ button { font: inherit; color: inherit; }
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
 
 .progress { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.pips { display: flex; gap: 6px; }
-.pip { width: 28px; height: 4px; border-radius: 2px; background: var(--line); }
-.pip.done { background: var(--accent); }
-.pip.now { background: var(--accent); opacity: .45; }
+.phases { display: flex; gap: 6px; }
+.phase {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted);
+  white-space: nowrap;
+}
+@media (max-width: 560px) { .phase .long { display: none; } }
+.phase.done { border-color: var(--accent); color: var(--accent); }
+.phase.now { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 
 .stage h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 600; outline: none; }
+
+.context {
+  display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px;
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--accent-soft); color: var(--ink); font-size: .95rem;
+}
+.context::before {
+  content: "i"; width: 20px; height: 20px; border-radius: 50%;
+  display: grid; place-items: center; margin-top: 1px;
+  font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+  background: var(--accent); color: var(--on-accent);
+}
 
 .answers { display: grid; gap: 12px; }
 .answer {
@@ -181,7 +199,6 @@ button { font: inherit; color: inherit; }
 @media (max-width: 600px) { .kbd-hint { display: none; } }
 
 /* Uitkomst als museumlabel */
-.verdict { display: grid; gap: 18px; }
 .stamp {
   justify-self: start;
   font-family: var(--f-mono); font-weight: 500; font-size: 13px;
@@ -193,12 +210,12 @@ button { font: inherit; color: inherit; }
   border: 1px solid var(--line);
   border-radius: 12px;
   overflow: hidden;
+  background: var(--surface); color: var(--ink);
 }
 .label-card .bar { height: 6px; }
 .label-card.tone-ok .bar { background: var(--ok); }
 .label-card.tone-warn .bar { background: var(--warn); }
 .label-card.tone-stop .bar { background: var(--stop); }
-.label-card { background: var(--surface); color: var(--ink); }
 .meta { display: grid; margin: 0; padding: 4px 18px; }
 .meta div {
   display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px;
@@ -208,6 +225,13 @@ button { font: inherit; color: inherit; }
 .meta dt { font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
 .meta dd { margin: 0; font-weight: 500; }
 @media (max-width: 520px) { .meta div { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+
+.signals {
+  border: 1.5px solid var(--warn); background: var(--warn-soft); color: var(--ink);
+  border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px;
+}
+.signals h3 { font-size: 1rem; font-weight: 600; color: var(--warn); }
+.signals ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 
 .why h3, .next h3 { font-size: 1.1rem; margin-bottom: 8px; font-weight: 600; }
 .why p { max-width: 68ch; }
@@ -232,7 +256,7 @@ button { font: inherit; color: inherit; }
   padding: 20px; display: grid; gap: 14px; min-width: 0;
 }
 .route h2 { font-size: 1.15rem; font-weight: 600; }
-.route ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.route ol { list-style: none; margin: 0; padding: 0; display: grid; }
 .route li { position: relative; padding-left: 22px; }
 .route li::before {
   content: ""; position: absolute; left: 4px; top: 8px; bottom: -8px;
@@ -248,34 +272,40 @@ button { font: inherit; color: inherit; }
 .route li.end.tone-warn::after { border-color: var(--warn); background: var(--warn); }
 .route li.end.tone-stop::after { border-color: var(--stop); background: var(--stop); }
 .route li.end.tone-ok, .route li.end.tone-warn, .route li.end.tone-stop { background: none; }
+.route li.divider { padding: 4px 0 10px 22px; }
+.route li.divider::after { display: none; }
+.route li.divider span { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .route-step {
   display: block; width: 100%; text-align: left; background: none; border: 0;
   padding: 2px 6px 14px; border-radius: 8px; cursor: pointer;
 }
 .route-step:hover { background: var(--accent-soft); }
-.route-step .q { display: block; font-size: 13px; color: var(--muted); }
+.route-step .q, .route-now .q { display: block; font-size: 13px; color: var(--muted); }
 .route-step .a { display: block; font-weight: 600; font-size: 14.5px; }
 .route-now { padding: 0 6px 4px; }
-.route-now .q { display: block; font-size: 13px; color: var(--muted); }
 .route-now .a { display: block; font-weight: 700; font-size: 14.5px; }
-.route .empty { color: var(--muted); font-size: 14px; }
 
 /* Schema */
-.schema { display: grid; gap: 14px; }
-.schema-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 8px 24px; }
-.schema-head h2 { font-size: 1.5rem; font-weight: 600; }
-.schema-head p { color: var(--muted); font-size: .95rem; max-width: 60ch; }
+.schema, .statements, .terms { display: grid; gap: 14px; }
+.section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 8px 24px; }
+.section-head h2, .terms h2 { font-size: 1.5rem; font-weight: 600; }
+.section-head p { color: var(--muted); font-size: .95rem; max-width: 62ch; }
 .map-wrap {
   background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
   overflow-x: auto; padding: 12px;
 }
-.map-wrap svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.map-wrap svg { display: block; width: 100%; min-width: 780px; height: auto; }
+.map .band { fill: var(--paper); }
+.map .bandlabel {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; fill: var(--muted);
+}
 .map .edge { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
 .map .edge.taken { stroke: var(--accent); stroke-width: 3; }
 .map .elabel {
   font-family: var(--f-body); font-size: 12px; fill: var(--muted);
   paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round;
 }
+.map .elabel.in-band { stroke: var(--paper); }
 .map .elabel.taken { fill: var(--accent); font-weight: 700; }
 .map .mk-default { fill: var(--line-strong); }
 .map .mk-taken { fill: var(--accent); }
@@ -294,9 +324,26 @@ button { font: inherit; color: inherit; }
 .map .node.leaf.current rect { stroke-width: 3.5; }
 .map .node.root-q text { font-weight: 600; }
 
+/* Vertaaltabel */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+.rs { width: 100%; min-width: 760px; border-collapse: collapse; font-size: .94rem; }
+.rs th {
+  text-align: left; font-family: var(--f-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+  padding: 12px 14px; border-bottom: 1px solid var(--line-strong);
+}
+.rs td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.rs tr:last-child td { border-bottom: 0; }
+.rs .code { font-family: var(--f-mono); font-weight: 500; white-space: nowrap; }
+.rs .name { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+.rs .group td { background: var(--paper); font-weight: 700; font-family: var(--f-display); font-size: 1rem; }
+.rs .start {
+  background: none; border: 1px solid var(--line-strong); border-radius: 8px;
+  padding: 5px 10px; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap;
+}
+.rs .start:hover { border-color: var(--accent); color: var(--accent); }
+
 /* Begrippen */
-.terms { display: grid; gap: 16px; }
-.terms h2 { font-size: 1.5rem; font-weight: 600; }
 .terms dl {
   margin: 0; display: grid; gap: 0 32px;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
@@ -318,8 +365,8 @@ footer {
 <div class="wrap">
   <header class="intro">
     <span class="eyebrow">Auteursrecht · CollectieNederland.nl</span>
-    <h1>Mag ik dit beschermde werk op Collectie Nederland tonen?</h1>
-    <p>Beantwoord hooguit vier vragen over hoe je het werk toont en wat de bronhouder heeft geregeld. Je krijgt een uitkomst met de reden erachter en wat je daarna doet.</p>
+    <h1>Mag ik dit werk op Collectie Nederland tonen?</h1>
+    <p>Bepaal eerst om welke rechten het gaat en wat er in het rechtenveld staat. Daarna volg je het stroomdiagram van de RCE over hoe je het werk toont. Je krijgt een uitkomst met de reden en wat je daarna doet.</p>
     <div class="legend" aria-label="Mogelijke uitkomsten">
       <span class="chip tone-ok">Mag, of zeer laag risico</span>
       <span class="chip tone-warn">Eerst controleren</span>
@@ -340,16 +387,28 @@ footer {
   </main>
 
   <section class="schema" aria-labelledby="schema-h">
-    <div class="schema-head">
+    <div class="section-head">
       <h2 id="schema-h">Het hele stroomschema</h2>
-      <p>Klik op een vraag of uitkomst om er direct naartoe te gaan. Jouw route is blauw gemarkeerd.</p>
+      <p>Klik op een vraag of uitkomst om er direct naartoe te gaan. Jouw route is blauw gemarkeerd. Het grijze vlak bovenaan is de aanvulling over rechten; daaronder staat het stroomdiagram van de RCE.</p>
     </div>
     <div class="map-wrap"><div id="map"></div></div>
+  </section>
+
+  <section class="statements" aria-labelledby="rs-h">
+    <div class="section-head">
+      <h2 id="rs-h">Rechtenstatements vertaald</h2>
+      <p>Wat elk statement in het rechtenveld betekent, of het toestemming geeft, en waar je in de keuzehulp terechtkomt. Met ‘Start’ begin je direct met dat statement.</p>
+    </div>
+    <div class="table-wrap"><table class="rs" id="rs-table"></table></div>
   </section>
 
   <section class="terms" aria-labelledby="terms-h">
     <h2 id="terms-h">Begrippen</h2>
     <dl>
+      <div><dt>Werk</dt><dd>Het object zelf: het schilderij, beeld, boek of de foto in de collectie. In SCHEMA-AP-NDE het <code>CreativeWork</code>.</dd></div>
+      <div><dt>Reproductie</dt><dd>De afbeelding van het werk: een foto of scan. In SCHEMA-AP-NDE het <code>MediaObject</code>. Meestal hebben werk en reproductie dezelfde rechten, behalve bij foto’s van 3D-objecten.</dd></div>
+      <div><dt>Metadata</dt><dd>De beschrijvende gegevens. Die zijn vrijwel nooit auteursrechtelijk beschermd; het rapport adviseert ze onder CC0 te laten leveren.</dd></div>
+      <div><dt>Rechtenveld</dt><dd><code>edm:rights</code>, of de licentie op het MediaObject. Het zegt wat de bronhouder over de rechten opgeeft, maar verandert niets aan de aansprakelijkheid van RCE.</dd></div>
       <div><dt>Embedden</dt><dd>Je plaatst een verwijzing naar het bronbestand. De browser van de bezoeker haalt het beeld rechtstreeks bij de bronhouder op. RCE slaat niets op.</dd></div>
       <div><dt>Framen</dt><dd>Je toont een venster op de pagina van de bronhouder waar het werk op staat. Ook dan staat het werk niet op servers van RCE.</dd></div>
       <div><dt>Hyperlink</dt><dd>Een gewone link naar de bron, zonder het werk te tonen. Linken naar rechtmatig online geplaatst materiaal mag vrijwel altijd.</dd></div>
@@ -361,25 +420,95 @@ footer {
       <div><dt>Pictoright</dt><dd>Auteursrechtorganisatie voor beeldmakers. Haar overeenkomsten met instellingen beperken of verbieden vaak het embedden door derden.</dd></div>
       <div><dt>CC-licentie</dt><dd>Geeft actief toestemming om het werk te gebruiken en door te plaatsen, onder de voorwaarden van de licentie.</dd></div>
       <div><dt>Rights Statement</dt><dd>Beschrijft alleen de rechtenstatus, bijvoorbeeld InCopyright. Het geeft geen toestemming en verandert niets aan de aansprakelijkheid.</dd></div>
+      <div><dt>Portretrecht</dt><dd>Staan er herkenbare personen op een foto, dan kunnen die zich soms tegen publicatie verzetten. Dat staat los van het auteursrecht.</dd></div>
+      <div><dt>Naburige rechten</dt><dd>Rechten van uitvoerende kunstenaars, zoals acteurs en muzikanten, op opnames van hun uitvoering. Die spelen bij geluid en video, naast het auteursrecht.</dd></div>
       <div><dt>Notice and takedown</dt><dd>Krijgt RCE een melding van inbreuk, dan moet het werk of de link onverwijld van het platform af.</dd></div>
     </dl>
   </section>
 
   <footer>
-    <p>Gebaseerd op het stroomdiagram en het rapport ‘Auteursrecht x CollectieNederland’ (RCE). De keuzehulp geeft richting bij de keuze; twijfel je over een concreet werk, overleg dan met een jurist.</p>
+    <p>Gebaseerd op het stroomdiagram en het rapport ‘Auteursrecht x CollectieNederland’ (RCE). Deel 1, over welke rechten het gaat en wat er in het rechtenveld staat, is een aanvulling op het stroomdiagram op basis van hetzelfde rapport.</p>
+    <p>De keuzehulp geeft richting bij de keuze. Twijfel je over een concreet werk, overleg dan met een jurist.</p>
   </footer>
 </div>
 
 <script>
+// Peiljaar voor publiek domein: auteursrecht loopt tot 1 januari, 70 jaar na het sterfjaar.
+const Y = new Date().getFullYear();
+const PD = Y - 71;
+
 const N = {
+  // Deel 1: welke rechten, en wat staat er in het rechtenveld?
+  p1: {
+    type: "q", phase: 1,
+    q: "Wat staat er in het rechtenveld?",
+    map: ["Wat staat er in", "het rechtenveld?"], x: 500, y: 20, w: 230,
+    answers: [
+      { label: "Publiek domein", short: "publiek domein", to: "p2",
+        hint: "Public Domain Mark (PDM), of een No Copyright-statement zoals NoC-NC of NoC-OKLR." },
+      { label: "CC0 of een Creative Commons-licentie", short: "CC0 / CC", to: "p4",
+        hint: "CC0, CC BY, CC BY-SA, CC BY-NC of een van de andere CC-licenties." },
+      { label: "In Copyright", short: "In Copyright", to: "q1",
+        hint: "InC, InC-EDU of InC-OW-EU: het werk is beschermd." },
+      { label: "Niet beoordeeld, onbepaald of leeg", short: "onbekend", to: "p2",
+        hint: "Copyright Not Evaluated (CNE), Copyright Undetermined (UND), of er staat niets." }
+    ],
+    help: `<p>Het rechtenveld (<code>edm:rights</code>, in SCHEMA-AP-NDE de licentie op het MediaObject) zegt wat de bronhouder over de rechten op de afbeelding opgeeft. Het verandert niets aan de aansprakelijkheid van RCE, maar het wijst je de weg.</p>
+      <p>De kwaliteit van dit veld is vaak laag. Daarom controleer je in de volgende stap of het klopt.</p>
+      <p class="tip">Twijfel je welk statement bij welke keuze hoort? Kijk in de tabel ‘Rechtenstatements vertaald’ onderaan de pagina.</p>`
+  },
+  p2: {
+    type: "q", phase: 1,
+    q: "Is het werk zelf nog auteursrechtelijk beschermd?",
+    map: ["Is het werk zelf", "nog beschermd?"], x: 250, y: 130, w: 210,
+    answers: [
+      { label: "Ja, het werk is nog beschermd", short: "ja", to: "q1",
+        hint: `De maker is na ${PD} overleden, of het anonieme werk is na ${PD} openbaar gemaakt.` },
+      { label: "Nee, het werk is publiek domein", short: "nee", to: "p3",
+        hint: `De maker is in of vóór ${PD} overleden.` },
+      { label: "Weet ik niet", short: "weet niet", to: "q1",
+        hint: "Maker of sterfjaar is onbekend. Je behandelt het werk dan als beschermd." }
+    ],
+    help: `<p>Het gaat hier om het werk: het schilderij, beeld, boek of de foto in de collectie. Niet om de afbeelding ervan; die komt in de volgende vraag.</p>
+      <p>Het auteursrecht loopt tot 1 januari, 70 jaar na het overlijden van de maker. In ${Y} is een werk vrij als de maker in of vóór ${PD} is overleden. Bij een anonieme maker of een organisatie telt het jaar van openbaarmaking: in of vóór ${PD}.</p>
+      <p class="tip">Kun je het niet vaststellen? Kies ‘Weet ik niet’. De keuzehulp behandelt het werk dan als beschermd.</p>`
+  },
+  p3: {
+    type: "q", phase: 1,
+    q: "Wat laat de afbeelding zien?",
+    map: ["Wat laat de", "afbeelding zien?"], x: 150, y: 240, w: 190,
+    answers: [
+      { label: "Een plat werk", short: "plat werk", to: "r_pd",
+        hint: "Schilderij, tekening, prent, kaart, document, of een foto die zelf het collectiestuk is." },
+      { label: "Een driedimensionaal object", short: "3D-object", to: "q1",
+        hint: "Beeld, vaas, meubel, gebouw of ander object. Je bepaalt verder de rechten van de fotograaf." }
+    ],
+    help: `<p>Een getrouwe foto of scan van een plat werk is geen eigen creatie. Is het werk publiek domein, dan is de afbeelding dat ook (art. 14 DSM-richtlijn).</p>
+      <p>Bij een foto van een driedimensionaal object maakt de fotograaf keuzes in licht, standpunt en compositie. Die foto kan een eigen auteursrecht hebben, ook als het object zelf vrij is. Het rapport noemt dit als uitzondering op de regel dat de reproductie dezelfde rechten heeft als het object.</p>`
+  },
+  p4: {
+    type: "q", phase: 1,
+    q: "Heeft de rechthebbende de licentie zelf gegeven?",
+    map: ["Licentie gegeven door", "de rechthebbende?"], x: 800, y: 130, w: 220,
+    answers: [
+      { label: "Ja, de licentie komt van de rechthebbende", short: "ja", to: "r_cc",
+        hint: "De bronhouder is zelf rechthebbende, of heeft de licentie van de maker gekregen." },
+      { label: "Nee, of dat weet ik niet", short: "nee / twijfel", to: "q1",
+        hint: "Bijvoorbeeld als dc:rights een andere partij noemt dan de bronhouder." }
+    ],
+    help: `<p>Alleen de rechthebbende mag een Creative Commons-licentie of CC0-verklaring toekennen. Een bronhouder die zelf geen rechthebbende is, kan dat niet.</p>
+      <p>Vergelijk het rechtenveld met <code>dc:rights</code>, de vermelding van de rechthebbende. Noemt die een commerciële fotograaf of bekende kunstenaar, dan is de licentie waarschijnlijk niet geldig. Het rapport noemt de werken van Ed van der Elsken als voorbeeld.</p>`
+  },
+
+  // Deel 2: het stroomdiagram van de RCE
   q1: {
-    type: "q",
+    type: "q", phase: 2,
     q: "Hoe ga je het werk tonen?",
-    map: ["Hoe ga je het", "werk tonen?"], x: 640, y: 20, w: 200,
+    map: ["Hoe ga je het", "werk tonen?"], x: 640, y: 420, w: 200,
     answers: [
       { label: "Ik ga het werk embedden of framen", short: "embedden / framen", to: "q2",
         hint: "Het bestand blijft bij de bronhouder. De browser van de bezoeker haalt het daar op." },
-      { label: "Ik host het zelf", short: "zelf hosten", to: "q5", ex: 860,
+      { label: "Ik host het zelf", short: "zelf hosten", to: "q5",
         hint: "Er komt een kopie op een server van RCE. Dat geldt ook voor zelf gemaakte thumbnails." }
     ],
     help: `<p><strong>Embedden en framen:</strong> het werk staat niet op servers van RCE. De bezoeker haalt het rechtstreeks bij de bronhouder op, dus RCE verricht zelf geen auteursrechtelijke handeling.</p>
@@ -387,22 +516,22 @@ const N = {
       <p class="tip">Kort cachen tijdens een technisch proces, waarna het bestand weer verdwijnt, telt niet als hosten.</p>`
   },
   q2: {
-    type: "q",
+    type: "q", phase: 2,
     q: "Toont de bronhouder het werk zelf ook op diens eigen website?",
-    map: ["Toont de bronhouder het", "zelf op de eigen website?"], x: 470, y: 130, w: 240,
+    map: ["Toont de bronhouder het", "zelf op de eigen website?"], x: 470, y: 530, w: 240,
     answers: [
       { label: "Ja", short: "Ja", to: "q3",
         hint: "Het werk staat vrij toegankelijk op het open internet, op de site van de bronhouder." },
-      { label: "Nee", short: "Nee", to: "q5", ex: 750,
+      { label: "Nee", short: "Nee", to: "q5",
         hint: "Het staat er niet, achter een inlog, of alleen beschikbaar voor Collectie Nederland." }
     ],
     help: `<p>Embedden en framen mogen alleen als de bronhouder het werk rechtmatig én op het open internet heeft geplaatst. Dan bereik je met Collectie Nederland geen nieuw publiek.</p>
       <p>Staat het werk achter een slotje, of heeft de bronhouder het alleen voor Collectie Nederland beschikbaar gemaakt? Dan is expliciete toestemming van de rechthebbende nodig.</p>`
   },
   q3: {
-    type: "q",
+    type: "q", phase: 2,
     q: "Heeft de bronhouder maatregelen genomen om embedding tegen te houden?",
-    map: ["Maatregelen tegen", "embedding genomen?"], x: 330, y: 240, w: 200,
+    map: ["Maatregelen tegen", "embedding genomen?"], x: 330, y: 640, w: 200,
     answers: [
       { label: "Ja", short: "Ja", to: "r_no_embed",
         hint: "Bijvoorbeeld hotlinkbeveiliging of een blokkade op framen." },
@@ -413,9 +542,9 @@ const N = {
       <p class="tip">Laadt het beeld niet buiten de website van de bronhouder, krijg je een foutmelding, of opent de pagina niet in een frame? Dan is er waarschijnlijk een maatregel.</p>`
   },
   q4: {
-    type: "q",
+    type: "q", phase: 2,
     q: "Heeft de bronhouder een overeenkomst met Pictoright?",
-    map: ["Overeenkomst met", "Pictoright?"], x: 170, y: 350, w: 180,
+    map: ["Overeenkomst met", "Pictoright?"], x: 170, y: 750, w: 180,
     answers: [
       { label: "Ja", short: "Ja", to: "r_pictoright",
         hint: "De bronhouder heeft voor (een deel van) de collectie afspraken met Pictoright." },
@@ -426,13 +555,13 @@ const N = {
       <p>Bronhouders weten niet altijd wat er in hun overeenkomst staat. Daarom is ‘ja’ een reden om eerst na te vragen.</p>`
   },
   q5: {
-    type: "q",
+    type: "q", phase: 2,
     q: "Heb je toestemming van de rechthebbende om het werk te tonen?",
-    map: ["Toestemming van", "de rechthebbende?"], x: 800, y: 350, w: 210,
+    map: ["Toestemming van", "de rechthebbende?"], x: 800, y: 750, w: 210,
     answers: [
-      { label: "Ja, bijvoorbeeld door een overeenkomst of CC-licentie", short: "Ja", to: "r_show", ex: 890,
+      { label: "Ja, bijvoorbeeld door een overeenkomst of CC-licentie", short: "Ja", to: "r_show",
         hint: "Een overeenkomst met bronhouder of rechthebbende, of een Creative Commons-licentie." },
-      { label: "Nee", short: "Nee", to: "r_no_show", ex: 700,
+      { label: "Nee", short: "Nee", to: "r_no_show",
         hint: "Er is geen toestemming, of het is onduidelijk." }
     ],
     help: `<p>Zonder toestemming geen hosting. Toestemming komt uit een overeenkomst met de bronhouder of rechthebbende, of uit een Creative Commons-licentie.</p>
@@ -440,9 +569,39 @@ const N = {
       <p class="tip">Ga je thumbnails opslaan? Dan moet de toestemming daar ook expliciet over gaan.</p>`
   },
 
+  // Uitkomsten van deel 1
+  r_pd: {
+    type: "r", tone: "ok", stamp: "Publiek domein",
+    map: ["Mag: publiek", "domein"], x: 90, y: 350, w: 160,
+    title: "Je mag de afbeelding tonen.",
+    risk: "Zeer laag",
+    basis: "Auteursrecht verlopen; een getrouwe reproductie van een plat werk krijgt geen eigen recht (art. 14 DSM-richtlijn)",
+    why: () => "Het werk is publiek domein. Een getrouwe foto of scan van een plat werk voegt geen eigen creatie toe, dus ook op de afbeelding rust geen auteursrecht. Je mag de afbeelding embedden en zelf hosten, ook als thumbnail.",
+    next: [
+      "Gebruik in het rechtenveld de Public Domain Mark (PDM). Het rapport raadt CC0 af voor museale collecties.",
+      "Check of er geen andere rechten spelen, zoals portretrecht van herkenbare personen.",
+      "Vermeld de maker en de bronhouder bij het werk."
+    ]
+  },
+  r_cc: {
+    type: "r", tone: "ok", stamp: "Toegestaan (CC)",
+    map: ["Mag: onder", "CC-voorwaarden"], x: 900, y: 240, w: 160,
+    title: "Je mag het werk tonen onder de voorwaarden van de licentie.",
+    risk: "Laag, als de licentie van de rechthebbende komt",
+    basis: "Creative Commons-licentie of CC0-verklaring van de rechthebbende",
+    why: () => "Een CC-licentie of CC0-verklaring geeft actief toestemming om het werk te gebruiken en door te plaatsen, mits de rechthebbende die heeft gegeven. Collectie Nederland geeft de licentie door aan hergebruikers. Een licentie die niet klopt, kan RCE daardoor alsnog raken.",
+    next: [
+      "Neem de licentie ongewijzigd over en toon de naamsvermelding die de licentie vraagt.",
+      "Leg vast waar de licentie vandaan komt, met een link naar de bron.",
+      "Komen dc:rights en edm:rights niet overeen? Vraag het na bij de bronhouder voordat je het werk toont.",
+      "Haal het werk direct offline als er een melding van inbreuk komt."
+    ]
+  },
+
+  // Uitkomsten van het stroomdiagram
   r_pictoright: {
     type: "r", tone: "warn", stamp: "Eerst controleren",
-    map: ["Controleer afspraken", "bij de bronhouder"], x: 90, y: 456, w: 160,
+    map: ["Controleer afspraken", "bij de bronhouder"], x: 90, y: 856, w: 160,
     title: "Een overeenkomst met Pictoright bevat vaak afspraken over embedden. Controleer bij de bronhouder of deze gevolgd worden.",
     risk: "Onzeker, tot je het hebt nagevraagd",
     basis: "Overeenkomst tussen bronhouder en Pictoright",
@@ -455,7 +614,7 @@ const N = {
   },
   r_low: {
     type: "r", tone: "ok", stamp: "Zeer laag risico",
-    map: ["Zeer laag risico", "bij embedden"], x: 270, y: 456, w: 160,
+    map: ["Zeer laag risico", "bij embedden"], x: 270, y: 856, w: 160,
     title: "Je loopt een zeer laag risico bij het embedden van dit materiaal.",
     risk: "Zeer laag",
     basis: "Rechtspraak HvJ EU over embedden en framen",
@@ -469,7 +628,7 @@ const N = {
   },
   r_no_embed: {
     type: "r", tone: "stop", stamp: "Niet embedden",
-    map: ["Niet", "embedden"], x: 450, y: 456, w: 160,
+    map: ["Niet", "embedden"], x: 450, y: 856, w: 160,
     title: "Je mag het werk niet embedden.",
     risk: "Hoog, als je de maatregel omzeilt",
     basis: "HvJ EU, VG Bild-Kunst (C-392/19)",
@@ -482,7 +641,7 @@ const N = {
   },
   r_no_show: {
     type: "r", tone: "stop", stamp: "Niet tonen",
-    map: ["Niet", "tonen"], x: 700, y: 456, w: 160,
+    map: ["Niet", "tonen"], x: 700, y: 856, w: 160,
     title: "Je mag het werk niet tonen.",
     risk: "Hoog, als je het toch toont",
     basis: "Auteurswet: zonder toestemming geen verveelvoudiging of openbaarmaking",
@@ -497,7 +656,7 @@ const N = {
   },
   r_show: {
     type: "r", tone: "ok", stamp: "Toegestaan",
-    map: ["Je mag het", "werk tonen"], x: 890, y: 456, w: 160,
+    map: ["Je mag het", "werk tonen"], x: 890, y: 856, w: 160,
     title: "Je mag het werk tonen.",
     risk: "Laag, als de toestemming vastligt",
     basis: "Toestemming van de rechthebbende (overeenkomst of CC-licentie)",
@@ -513,19 +672,73 @@ const N = {
   }
 };
 
-function viaEmbed(steps) { return steps[0] && steps[0].pick === 0; }
+// Ligging van pijlen in het schema: ex = waar de pijl de doos binnenkomt, side/ly = plek van het label
+const EDGES = {
+  "p1>q1": { ex: 640, side: "l", ly: 140 },
+  "p2>q1": { ex: 595, side: "l", ly: 250 },
+  "p3>q1": { ex: 555, side: "l", ly: 362 },
+  "p4>q1": { ex: 725, ly: 320 },
+  "q1>q5": { ex: 860 },
+  "q2>q5": { ex: 750 },
+  "q5>r_show": { ex: 890 },
+  "q5>r_no_show": { ex: 700 }
+};
+const BAND_H = 408;
 
-let steps = [{ id: "q1", pick: null }];
+// Rechtenstatements zoals Europeana ze accepteert, met de keuze in vraag 1 (p1)
+const RS = [
+  { group: "Publiek domein" },
+  { code: "PDM", name: "Public Domain Mark", says: "Het werk is publiek domein.", perm: ["ok", "Niet nodig"], pick: 0 },
+  { code: "NoC-NC", name: "No Copyright – Non-Commercial Use Only", says: "Geen auteursrecht, maar commercieel hergebruik is contractueel beperkt.", perm: ["ok", "Niet nodig voor tonen"], pick: 0 },
+  { code: "NoC-OKLR", name: "No Copyright – Other Known Legal Restrictions", says: "Geen auteursrecht, wel een andere wettelijke beperking, bijvoorbeeld privacy.", perm: ["warn", "Check de beperking"], pick: 0 },
+  { group: "Licenties" },
+  { code: "CC0", name: "Public Domain Dedication", says: "De rechthebbende doet afstand van zijn rechten.", perm: ["ok", "Ja"], pick: 1 },
+  { code: "CC BY · BY-SA · BY-ND", name: "Creative Commons", says: "Gebruik toegestaan, met naamsvermelding en eventueel delen onder dezelfde voorwaarden of zonder bewerking.", perm: ["ok", "Ja, onder voorwaarden"], pick: 1 },
+  { code: "CC BY-NC · BY-NC-SA · BY-NC-ND", name: "Creative Commons, niet-commercieel", says: "Als hierboven, maar alleen voor niet-commercieel gebruik.", perm: ["ok", "Ja, onder voorwaarden"], pick: 1 },
+  { group: "Beschermd" },
+  { code: "InC", name: "In Copyright", says: "Het werk is auteursrechtelijk beschermd.", perm: ["stop", "Nee"], pick: 2 },
+  { code: "InC-EDU", name: "In Copyright – Educational Use Permitted", says: "Beschermd; educatief gebruik is toegestaan.", perm: ["stop", "Nee, niet voor tonen op Collectie Nederland"], pick: 2 },
+  { code: "InC-OW-EU", name: "In Copyright – EU Orphan Work", says: "Verweesd werk volgens de EU-richtlijn: de rechthebbende is niet te vinden.", perm: ["stop", "Alleen voor de instelling die het registreerde"], pick: 2 },
+  { group: "Onbekend" },
+  { code: "CNE", name: "Copyright Not Evaluated", says: "De rechtenstatus is niet beoordeeld.", perm: ["stop", "Nee"], pick: 3 },
+  { code: "UND", name: "Copyright Undetermined", says: "Beoordeeld, maar niet vast te stellen.", perm: ["stop", "Nee"], pick: 3 },
+  { code: "—", name: "Leeg", says: "Er staat niets in het rechtenveld.", perm: ["stop", "Nee"], pick: 3 }
+];
+
+let steps = [{ id: "p1", pick: null }];
 const cur = () => steps[steps.length - 1];
 const $ = (s) => document.querySelector(s);
+const pickOf = (id) => { const s = steps.find((x) => x.id === id); return s ? s.pick : null; };
 const ARROW = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
+function viaEmbed() { return pickOf("q1") === 0; }
+
 function displayMode() {
-  if (!steps[0] || steps[0].pick === null) return null;
-  if (steps[0].pick === 1) return "Zelf hosten";
-  const q2 = steps.find((s) => s.id === "q2");
-  if (q2 && q2.pick === 1) return "Embedden of framen (bron niet openbaar online)";
+  const m = pickOf("q1");
+  if (m === null) return null;
+  if (m === 1) return "Zelf hosten";
+  if (pickOf("q2") === 1) return "Embedden of framen (bron niet openbaar online)";
   return "Embedden of framen";
+}
+
+// Waarom je in het stroomdiagram zit, als deel 1 daar iets over zegt
+function context() {
+  if (pickOf("p3") === 1) return "Het object is publiek domein, maar de foto ervan kan een eigen auteursrecht hebben. Je bepaalt nu de rechten op de foto: met ‘rechthebbende’ wordt hier de fotograaf bedoeld.";
+  if (pickOf("p2") === 2) return "Je weet niet of het werk publiek domein is, dus je behandelt het als beschermd.";
+  if (pickOf("p4") === 1) return "De CC-licentie in het rechtenveld is onzeker, dus je behandelt het werk als beschermd.";
+  return null;
+}
+
+// Wat er volgens je antwoorden niet klopt aan het rechtenveld
+function signals() {
+  const f = pickOf("p1"), w = pickOf("p2"), out = [];
+  if (f === 0 && w === 0) out.push("Het rechtenveld zegt publiek domein, maar het werk is nog beschermd. Meld de fout aan de bronhouder.");
+  if (f === 0 && w === 2) out.push("Het rechtenveld zegt publiek domein, maar dat kon je niet bevestigen. Controleer maker en sterfjaar met de bronhouder.");
+  if (f === 0 && w === 1 && pickOf("p3") === 1) out.push("Het rechtenveld zegt publiek domein, maar dat geldt alleen voor het object. De foto kan eigen rechten hebben; vraag de bronhouder de rechten op de foto apart te vermelden.");
+  if (f === 3 && w === 0) out.push("Het rechtenveld is leeg of onbepaald, terwijl het werk beschermd is. Vraag de bronhouder In Copyright (InC) in te vullen.");
+  if (f === 3 && w === 1) out.push("Het rechtenveld is leeg of onbepaald, terwijl het werk publiek domein is. Vraag de bronhouder de Public Domain Mark (PDM) in te vullen.");
+  if (f === 1 && pickOf("p4") === 1) out.push("De CC-licentie is mogelijk niet door de rechthebbende gegeven. Neem haar niet over en meld dit aan de bronhouder.");
+  return out;
 }
 
 function answer(i) {
@@ -547,14 +760,18 @@ function goToStep(k) {
   render(true);
 }
 function reset() {
-  steps = [{ id: "q1", pick: null }];
+  steps = [{ id: "p1", pick: null }];
+  render(true);
+}
+function startWith(pick) {
+  steps = [{ id: "p1", pick }, { id: N.p1.answers[pick].to, pick: null }];
   render(true);
 }
 function jumpTo(id) {
   const k = steps.findIndex((s) => s.id === id);
   if (k >= 0) return goToStep(k);
   // kortste route vanaf de eerste vraag
-  const queue = [[{ id: "q1", pick: null }]];
+  const queue = [[{ id: "p1", pick: null }]];
   while (queue.length) {
     const path = queue.shift();
     const last = path[path.length - 1];
@@ -562,6 +779,7 @@ function jumpTo(id) {
     const node = N[last.id];
     if (node.type !== "q") continue;
     node.answers.forEach((a, i) => {
+      if (path.some((s) => s.id === a.to)) return;
       const copy = path.map((s) => ({ ...s }));
       copy[copy.length - 1].pick = i;
       copy.push({ id: a.to, pick: null });
@@ -570,23 +788,33 @@ function jumpTo(id) {
   }
 }
 
+function phaseChips(phase, isOutcome) {
+  const lbl = ["Welke rechten", "Hoe toon je het"];
+  return `<span class="phases">${lbl.map((l, i) => {
+    const p = i + 1;
+    const cls = isOutcome ? (p <= phase ? "done" : "") : (p < phase ? "done" : p === phase ? "now" : "");
+    return `<span class="phase ${cls}">Deel ${p}<span class="long"> · ${l}</span></span>`;
+  }).join("")}</span>`;
+}
+
 function renderStage() {
   const node = N[cur().id];
   const stage = $("#stage");
-  const asked = steps.filter((s) => N[s.id].type === "q").length;
   stage.style.animation = "none";
   void stage.offsetWidth;
   stage.style.animation = "";
+  const reachedPhase2 = steps.some((s) => N[s.id].phase === 2);
+  const ctx = reachedPhase2 ? context() : null;
 
   if (node.type === "q") {
-    let pips = "";
-    for (let i = 1; i <= 4; i++) pips += `<span class="pip ${i < asked ? "done" : i === asked ? "now" : ""}"></span>`;
+    const n = steps.filter((s) => N[s.id].phase === node.phase).length;
     stage.innerHTML = `
       <div class="progress">
-        <span class="eyebrow">Vraag ${asked}</span>
-        <span class="pips" aria-hidden="true">${pips}</span>
+        <span class="eyebrow">Vraag ${n}</span>
+        ${phaseChips(node.phase, false)}
       </div>
       <h2 id="stage-h" tabindex="-1">${node.q}</h2>
+      ${node.phase === 2 && ctx ? `<p class="context">${ctx}</p>` : ""}
       <div class="answers">
         ${node.answers.map((a, i) => `
           <button class="answer" type="button" data-i="${i}">
@@ -601,16 +829,18 @@ function renderStage() {
       </details>
       <div class="nav-row">
         ${steps.length > 1 ? '<button class="btn" type="button" data-act="back">← Vorige vraag</button>' : ""}
-        <span class="kbd-hint">Toets <kbd>1</kbd> of <kbd>2</kbd> om te kiezen, <kbd>←</kbd> om terug te gaan</span>
+        <span class="kbd-hint">Toets <kbd>1</kbd>–<kbd>${node.answers.length}</kbd> om te kiezen, <kbd>←</kbd> om terug te gaan</span>
       </div>`;
   } else {
     const mode = displayMode();
+    const sig = signals();
     stage.innerHTML = `
       <div class="progress">
-        <span class="eyebrow">Uitkomst</span>
         <span class="stamp tone-${node.tone}">${node.stamp}</span>
+        ${phaseChips(reachedPhase2 ? 2 : 1, true)}
       </div>
       <h2 id="stage-h" tabindex="-1">${node.title}</h2>
+      ${ctx ? `<p class="context">${ctx}</p>` : ""}
       <div class="label-card tone-${node.tone}">
         <div class="bar"></div>
         <dl class="meta">
@@ -619,6 +849,7 @@ function renderStage() {
           <div><dt>Grondslag</dt><dd>${node.basis}</dd></div>
         </dl>
       </div>
+      ${sig.length ? `<div class="signals"><h3>Signaal voor het rechtenveld</h3><ul>${sig.map((s) => `<li>${s}</li>`).join("")}</ul></div>` : ""}
       <div class="why"><h3>Waarom</h3><p>${node.why(steps)}</p></div>
       <div class="next"><h3>Wat nu</h3><ul>${node.next.map((n) => `<li>${n}</li>`).join("")}</ul></div>
       <div class="nav-row">
@@ -632,16 +863,22 @@ function renderStage() {
 }
 
 function renderRoute() {
-  const items = steps.map((s, k) => {
+  let lastPhase = 0;
+  const items = [];
+  steps.forEach((s, k) => {
     const node = N[s.id];
+    if (node.phase && node.phase !== lastPhase) {
+      if (node.phase === 2) items.push(`<li class="divider"><span>Stroomdiagram RCE</span></li>`);
+      lastPhase = node.phase;
+    }
     if (node.type === "q" && s.pick !== null) {
-      return `<li><button class="route-step" type="button" data-step="${k}" title="Terug naar deze vraag">
-        <span class="q">${node.q}</span><span class="a">${node.answers[s.pick].label}</span></button></li>`;
+      items.push(`<li><button class="route-step" type="button" data-step="${k}" title="Terug naar deze vraag">
+        <span class="q">${node.q}</span><span class="a">${node.answers[s.pick].label}</span></button></li>`);
+    } else if (node.type === "q") {
+      items.push(`<li class="end"><div class="route-now"><span class="q">Nu</span><span class="a">${node.q}</span></div></li>`);
+    } else {
+      items.push(`<li class="end tone-${node.tone}"><div class="route-now"><span class="q">Uitkomst</span><span class="a">${node.stamp}</span></div></li>`);
     }
-    if (node.type === "q") {
-      return `<li class="end"><div class="route-now"><span class="q">Nu</span><span class="a">${node.q}</span></div></li>`;
-    }
-    return `<li class="end tone-${node.tone}"><div class="route-now"><span class="q">Uitkomst</span><span class="a">${node.stamp}</span></div></li>`;
   });
   $("#route").innerHTML = `<ol>${items.join("")}</ol>`;
   $("#back-btn").disabled = steps.length < 2;
@@ -656,18 +893,29 @@ function renderMap() {
 
   for (const [id, n] of Object.entries(N)) {
     if (n.type !== "q") continue;
+    // antwoorden met hetzelfde doel worden één pijl met een gecombineerd label
+    const groups = new Map();
     n.answers.forEach((a, i) => {
-      const c = N[a.to];
-      const ex = a.ex ?? c.x;
-      const y0 = n.y + H_Q, ym = y0 + 18, y1 = c.y - 2;
-      const on = taken.has(`${id}:${i}`);
-      edges += `<path class="edge ${on ? "taken" : ""}" d="M${n.x} ${y0} V${ym} H${ex} V${y1}" marker-end="url(#${on ? "mk-t" : "mk-d"})"/>`;
-      labels += `<text class="elabel ${on ? "taken" : ""}" x="${ex + 7}" y="${(ym + c.y) / 2 + 4}">${a.short}</text>`;
+      if (!groups.has(a.to)) groups.set(a.to, { shorts: [], picks: [] });
+      groups.get(a.to).shorts.push(a.short);
+      groups.get(a.to).picks.push(i);
     });
+    for (const [to, g] of groups) {
+      const c = N[to];
+      const opt = EDGES[`${id}>${to}`] || {};
+      const ex = opt.ex ?? c.x;
+      const y0 = n.y + H_Q, ym = y0 + 18, y1 = c.y - 2;
+      const on = g.picks.some((i) => taken.has(`${id}:${i}`));
+      const ly = opt.ly ?? (ym + c.y) / 2 + 4;
+      const left = opt.side === "l";
+      const inBand = ly < BAND_H ? "in-band" : "";
+      edges += `<path class="edge ${on ? "taken" : ""}" d="M${n.x} ${y0} V${ym} H${ex} V${y1}" marker-end="url(#${on ? "mk-t" : "mk-d"})"/>`;
+      labels += `<text class="elabel ${inBand} ${on ? "taken" : ""}" x="${left ? ex - 7 : ex + 7}" y="${ly}" text-anchor="${left ? "end" : "start"}">${g.shorts.join(" / ")}</text>`;
+    }
   }
   for (const [id, n] of Object.entries(N)) {
     const hh = h(n), x0 = n.x - n.w / 2;
-    const cls = ["node", n.type === "r" ? `leaf tone-${n.tone}` : "", onPath.has(id) ? "on-path" : "", cur().id === id ? "current" : "", id === "q1" ? "root-q" : ""].join(" ");
+    const cls = ["node", n.type === "r" ? `leaf tone-${n.tone}` : "", onPath.has(id) ? "on-path" : "", cur().id === id ? "current" : "", id === "p1" || id === "q1" ? "root-q" : ""].join(" ");
     const first = n.y + hh / 2 - (n.map.length - 1) * 8 + 4.5;
     const tsp = n.map.map((t, k) => `<tspan x="${n.x}" y="${first + k * 16}">${t}</tspan>`).join("");
     const aria = n.type === "q" ? `Ga naar vraag: ${n.q}` : `Toon uitkomst: ${n.stamp}`;
@@ -676,13 +924,31 @@ function renderMap() {
       <text text-anchor="middle">${tsp}</text></g>`;
   }
   $("#map").innerHTML = `
-    <svg class="map" viewBox="0 0 1000 524" role="group" aria-label="Stroomschema: mag ik dit werk tonen op Collectie Nederland?">
+    <svg class="map" viewBox="0 0 1000 920" role="group" aria-label="Stroomschema: mag ik dit werk tonen op Collectie Nederland?">
       <defs>
         <marker id="mk-d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="mk-default" d="M0 0 10 5 0 10z"/></marker>
         <marker id="mk-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path class="mk-taken" d="M0 0 10 5 0 10z"/></marker>
       </defs>
+      <rect class="band" x="0" y="0" width="1000" height="${BAND_H}" rx="10"/>
+      <text class="bandlabel" x="14" y="26">Deel 1 · Welke rechten</text>
+      <text class="bandlabel" x="14" y="${BAND_H + 26}">Deel 2 · Stroomdiagram RCE</text>
       ${edges}${labels}${nodes}
     </svg>`;
+}
+
+function renderTable() {
+  const rows = RS.map((r) => r.group
+    ? `<tr class="group"><td colspan="4">${r.group}</td></tr>`
+    : `<tr>
+        <td><span class="code">${r.code}</span><span class="name">${r.name}</span></td>
+        <td>${r.says}</td>
+        <td><span class="chip tone-${r.perm[0]}">${r.perm[1]}</span></td>
+        <td><button class="start" type="button" data-start="${r.pick}" title="Begin de keuzehulp met ${r.code}">Start →</button>
+          <span class="name">${N.p1.answers[r.pick].label}</span></td>
+      </tr>`).join("");
+  $("#rs-table").innerHTML = `
+    <thead><tr><th scope="col">Statement</th><th scope="col">Wat het zegt</th><th scope="col">Geeft toestemming?</th><th scope="col">In de keuzehulp</th></tr></thead>
+    <tbody>${rows}</tbody>`;
 }
 
 function render(focus) {
@@ -699,15 +965,20 @@ function render(focus) {
 
 function adviceText() {
   const node = N[cur().id];
-  const lines = ["Mag ik dit beschermde werk op Collectie Nederland tonen?", "", "Route:"];
+  const lines = ["Mag ik dit werk op Collectie Nederland tonen?", "", "Route:"];
   steps.forEach((s) => {
     const n = N[s.id];
     if (n.type === "q" && s.pick !== null) lines.push(`- ${n.q} → ${n.answers[s.pick].label}`);
   });
   lines.push("", `Uitkomst: ${node.stamp}. ${node.title}`);
+  const ctx = context();
+  if (ctx && steps.some((s) => N[s.id].phase === 2)) lines.push(`Let op: ${ctx}`);
   const mode = displayMode();
   if (mode) lines.push(`Vertoning: ${mode}`);
-  lines.push(`Risico voor RCE: ${node.risk}`, `Grondslag: ${node.basis}`, "", `Waarom: ${node.why(steps)}`, "", "Wat nu:");
+  lines.push(`Risico voor RCE: ${node.risk}`, `Grondslag: ${node.basis}`);
+  const sig = signals();
+  if (sig.length) { lines.push("", "Signaal voor het rechtenveld:"); sig.forEach((s) => lines.push(`- ${s}`)); }
+  lines.push("", `Waarom: ${node.why(steps)}`, "", "Wat nu:");
   node.next.forEach((n) => lines.push(`- ${n}`));
   lines.push("", "Bron: stroomdiagram en rapport ‘Auteursrecht x CollectieNederland’ (RCE).");
   return lines.join("\n");
@@ -742,6 +1013,8 @@ document.addEventListener("click", (e) => {
   if (st) return goToStep(+st.dataset.step);
   const nd = e.target.closest("[data-node]");
   if (nd) return jumpTo(nd.dataset.node);
+  const sw = e.target.closest("[data-start]");
+  if (sw) return startWith(+sw.dataset.start);
 });
 $("#back-btn").addEventListener("click", back);
 $("#reset-btn").addEventListener("click", reset);
@@ -751,9 +1024,10 @@ document.addEventListener("keydown", (e) => {
   if (t.matches("input, textarea") || e.metaKey || e.ctrlKey || e.altKey) return;
   const nd = t.closest("[data-node]");
   if (nd && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); return jumpTo(nd.dataset.node); }
-  if (e.key === "1" || e.key === "2") answer(+e.key - 1);
+  if (/^[1-9]$/.test(e.key)) answer(+e.key - 1);
   else if (e.key === "ArrowLeft" || e.key === "Backspace") { if (steps.length > 1) { e.preventDefault(); back(); } }
 });
 
+renderTable();
 render(false);
 </script>
