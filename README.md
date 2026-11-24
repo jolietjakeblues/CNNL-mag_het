@@ -2,7 +2,7 @@
 
 Klikbare keuzehulp bij de vraag: *mag ik dit werk op CollectieNederland.nl tonen?*
 
-De keuzehulp volgt het stroomdiagram van de RCE en de toelichting uit het rapport ‘Auteursrecht x CollectieNederland’, de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollecties (Rbr). Daarna krijg je een uitkomst met de reden, de vervolgstappen en eventuele signalen over het rechtenveld.
+De keuzehulp volgt het stroomdiagram van de RCE en de toelichting uit het rapport ‘Auteursrecht x CollectieNederland’, de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollectie en subsidiëring museale instellingen (Rbr). Daarna krijg je een uitkomst met de reden, de vervolgstappen en eventuele signalen over het rechtenveld.
 
 ## Opbouw
 
@@ -51,7 +51,7 @@ Onder het schema staat een tabel met de rechtenstatements die Europeana acceptee
 | `index.html` | De keuzehulp voor GitHub Pages, gemaakt door `maak-index.py`. Pas dit bestand niet met de hand aan. |
 | `beeldroutes.html` | Bron van de overlegpagina ‘Hoe komt het beeld op Collectie Nederland?’: embedden, framen, thumbnails en hosten naast elkaar, met het NDE-datasetregister en de freeze. |
 | `beeldroutes/index.html` | De overlegpagina voor GitHub Pages, gemaakt door `maak-index.py`. Pas dit bestand niet met de hand aan. |
-| `maak-index.py` | Zet het HTML-skelet om de bronbestanden heen en schrijft de Pages-versies. |
+| `maak-index.py` | Zet het HTML-skelet om de bronbestanden heen en schrijft de Pages-versies. De pagina's linken naar elkaar via hun claude.ai-adres; het script maakt daar op GitHub Pages lokale links van (`ARTIFACTS`). |
 | `.gitignore` | Houdt de originele brondocumenten (`*.pdf`, `*.docx`) buiten de repository. |
 
 ## Inhoud aanpassen
