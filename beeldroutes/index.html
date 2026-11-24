@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Embedden, framen, thumbnails en hosten naast elkaar, met het NDE-datasetregister en de freeze.">
+<title>Hoe komt het beeld op Collectie Nederland?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Basisreset (op claude.ai voegt het artifact-skelet dit zelf toe) */
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+/* Layout: één scrollende overlegpagina; bovenaan vier routes naast elkaar, daaronder de vragen in de volgorde van de agenda */
+:root {
+  --paper: #f3f5f8;
+  --surface: #ffffff;
+  --ink: #15213a;
+  --muted: #586379;
+  --line: #d6dce6;
+  --line-strong: #9aa6b8;
+  --accent: #2443a6;
+  --accent-soft: #e5eaf9;
+  --on-accent: #ffffff;
+  --ok: #1d7646;
+  --ok-soft: #e2f1e8;
+  --warn: #9a5b06;
+  --warn-soft: #fbeed6;
+  --stop: #b0261d;
+  --stop-soft: #fbe3e1;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e131b; --surface: #161d28; --ink: #e5eaf2; --muted: #9ba6b8;
+    --line: #2a3443; --line-strong: #56637a; --accent: #8fa7ff; --accent-soft: #1c2641;
+    --on-accent: #0e131b; --ok: #62cf95; --ok-soft: #13271c; --warn: #f0b55c;
+    --warn-soft: #2b2213; --stop: #ff8b81; --stop-soft: #2d1716; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e131b; --surface: #161d28; --ink: #e5eaf2; --muted: #9ba6b8;
+  --line: #2a3443; --line-strong: #56637a; --accent: #8fa7ff; --accent-soft: #1c2641;
+  --on-accent: #0e131b; --ok: #62cf95; --ok-soft: #13271c; --warn: #f0b55c;
+  --warn-soft: #2b2213; --stop: #ff8b81; --stop-soft: #2d1716; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+.wrap {
+  max-width: 1160px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 56px;
+  display: grid; gap: 48px;
+}
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.12; }
+p { margin: 0; }
+code { font-family: var(--f-mono); font-size: .86em; padding: 1px 5px; border-radius: 4px; background: var(--paper); border: 1px solid var(--line); overflow-wrap: anywhere; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+.intro { display: grid; gap: 14px; max-width: 760px; }
+.intro h1 { font-size: clamp(2rem, 4.6vw, 3.1rem); font-weight: 700; letter-spacing: -.01em; }
+.intro p { color: var(--muted); font-size: 1.075rem; max-width: 62ch; }
+
+section { display: grid; gap: 18px; }
+.sec-head { display: grid; gap: 6px; max-width: 70ch; }
+.sec-head h2 { font-size: 1.55rem; font-weight: 600; }
+.sec-head p { color: var(--muted); }
+
+/* Routes */
+.routes { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.route {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0;
+}
+.route-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.route h3 { font-size: 1.25rem; font-weight: 600; }
+.chip {
+  display: inline-flex; align-items: center; gap: 7px; padding: 3px 10px 3px 8px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 600; white-space: nowrap;
+}
+.chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.tone-ok { color: var(--ok); background: var(--ok-soft); }
+.tone-warn { color: var(--warn); background: var(--warn-soft); }
+.tone-stop { color: var(--stop); background: var(--stop-soft); }
+
+.flow { width: 100%; height: auto; display: block; }
+.flow .box { fill: var(--paper); stroke: var(--line-strong); stroke-width: 1.2; }
+.flow .box.has-file { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }
+.flow .box.idle { stroke-dasharray: 4 3; }
+.flow .bt { font-family: var(--f-body); font-size: 11.5px; font-weight: 600; fill: var(--ink); }
+.flow .bs { font-family: var(--f-mono); font-size: 10px; fill: var(--muted); }
+.flow .arrow { fill: none; stroke: var(--accent); stroke-width: 2; }
+.flow .arrow.copy { stroke: var(--stop); stroke-dasharray: 5 4; }
+.flow .al { font-family: var(--f-body); font-size: 10.5px; fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.flow .al.copy { fill: var(--stop); }
+.flow .mk { fill: var(--accent); }
+.flow .mk-copy { fill: var(--stop); }
+.flow .file { fill: var(--surface); stroke: var(--accent); stroke-width: 1.4; }
+.flow .file-fold { fill: var(--accent); }
+.flow .file-t { font-family: var(--f-mono); font-size: 7.5px; fill: var(--accent); }
+.flow .frame { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 3 2; }
+
+.facts { margin: 0; display: grid; }
+.facts div { display: grid; gap: 1px; padding: 8px 0; border-top: 1px dashed var(--line); }
+.facts dt { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-size: .94rem; }
+
+/* Technisch vs juridisch */
+.split { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.verdict {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+  display: grid; gap: 10px; align-content: start;
+}
+.verdict .big { font-family: var(--f-display); font-size: 2.6rem; font-weight: 700; line-height: 1; }
+.verdict.no .big { color: var(--accent); }
+.verdict.yes .big { color: var(--stop); }
+.verdict h3 { font-size: 1.1rem; font-weight: 600; }
+.verdict p { max-width: 60ch; }
+.takeaway {
+  border-left: 4px solid var(--accent); padding: 10px 16px; background: var(--accent-soft);
+  border-radius: 0 10px 10px 0; max-width: 80ch;
+}
+
+/* Ketens */
+.chain { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); counter-reset: step; }
+.chain li {
+  position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 14px 14px 46px; display: grid; gap: 4px; counter-increment: step; min-width: 0;
+}
+.chain li::before {
+  content: counter(step); position: absolute; left: 12px; top: 13px; width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center; font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+  background: var(--accent); color: var(--on-accent);
+}
+.chain strong { font-weight: 600; }
+.chain span { color: var(--muted); font-size: .92rem; }
+.chain li.fork { border-color: var(--warn); }
+.chain li.fork::before { background: var(--warn); color: var(--surface); }
+.fork-opts { display: grid; gap: 6px; margin-top: 4px; }
+.fork-opts div { font-size: .92rem; }
+
+.open {
+  border: 1.5px solid var(--warn); background: var(--warn-soft); border-radius: 12px; padding: 14px 16px;
+  display: grid; gap: 6px; max-width: 80ch;
+}
+.open h3 { font-size: 1rem; font-weight: 600; color: var(--warn); }
+
+/* Begrippen */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: .94rem; }
+th { text-align: left; font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line-strong); }
+td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 700; white-space: nowrap; }
+td:last-child { color: var(--muted); }
+
+/* Open vragen */
+.questions { margin: 0; padding-left: 22px; display: grid; gap: 10px; max-width: 80ch; }
+.questions li::marker { font-family: var(--f-mono); color: var(--accent); }
+
+footer { border-top: 1px solid var(--line); padding-top: 18px; color: var(--muted); font-size: 14px; max-width: 80ch; display: grid; gap: 6px; }
+a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="intro">
+    <span class="eyebrow">Overleg techniek en juridisch · Collectie Nederland</span>
+    <h1>Hoe komt het beeld op Collectie Nederland?</h1>
+    <p>Waar het beeldbestand staat, bepaalt wie de auteursrechtelijke handeling verricht. Deze pagina zet de vier manieren van tonen naast elkaar, en beantwoordt de vragen over de bronpagina, het datasetregister en de freeze.</p>
+  </header>
+
+  <section aria-labelledby="routes-h">
+    <div class="sec-head">
+      <h2 id="routes-h">Vier manieren om een beeld te tonen</h2>
+      <p>Blauw omrand: daar staat het bestand. Een pijl is een verzoek van de browser van de bezoeker; de rode stippellijn is een kopie.</p>
+    </div>
+    <div class="routes" id="routes"></div>
+  </section>
+
+  <section aria-labelledby="bron-h">
+    <div class="sec-head">
+      <span class="eyebrow">Vraag van het juridische team</span>
+      <h2 id="bron-h">Moet de afbeelding ook op de bronpagina staan?</h2>
+    </div>
+    <div class="split">
+      <div class="verdict no">
+        <span class="big">Nee</span>
+        <h3>Technisch</h3>
+        <p>Embedden werkt zodra het bestand op een openbare URL staat, bijvoorbeeld <code>https://museum.nl/beelden/1234.jpg</code>. Het hoeft op geen enkele webpagina van het museum zichtbaar te zijn. Een bronhouder kan een bestand dus alleen voor Collectie Nederland klaarzetten.</p>
+      </div>
+      <div class="verdict yes">
+        <span class="big">Ja</span>
+        <h3>Juridisch</h3>
+        <p>Embedden is alleen geen nieuwe openbaarmaking als het werk al vrij en rechtmatig op het open internet staat. Staat het bestand er alleen voor Collectie Nederland, of achter een inlog, dan bereik je een nieuw publiek en is toestemming van de rechthebbende nodig.</p>
+      </div>
+    </div>
+    <p class="takeaway">Dat iets technisch werkt, zegt niets over de juridische route. Daarom vraagt het stroomschema: <strong>toont de bronhouder het werk zelf ook op diens eigen website?</strong></p>
+  </section>
+
+  <section aria-labelledby="ndr-h">
+    <div class="sec-head">
+      <h2 id="ndr-h">De keten via het NDE-datasetregister</h2>
+      <p>Het register bevat beschrijvingen van datasets, niet de data of de beelden zelf. Het is een wegwijzer.</p>
+    </div>
+    <ol class="chain">
+      <li><strong>Bronhouder</strong><span>Publiceert de collectie als dataset en meldt die aan bij het register.</span></li>
+      <li><strong>Datasetregister</strong><span>Beschrijft welke datasets er zijn en waar ze staan.</span></li>
+      <li><strong>Collectie Nederland</strong><span>Vindt de dataset via het register en haalt de data op bij de bronhouder.</span></li>
+      <li><strong>Record met beeld-URL</strong><span>Per object een MediaObject met de URL van het beeld en, volgens SCHEMA-AP-NDE, een verplichte licentie.</span></li>
+      <li><strong>Browser van de bezoeker</strong><span>Haalt het beeld via die URL bij de bronhouder op. Dat is embedden.</span></li>
+    </ol>
+    <div class="open">
+      <h3>Open voor het overleg</h3>
+      <p>Art. 2.2 lid 2 Rbr verplicht beheerders aan te sluiten op “het geautomatiseerde systeem van de minister”. Is dat het datasetregister, Collectie Nederland, of de combinatie? Dat is geen technische vraag, maar het antwoord bepaalt wat de aansluitplicht inhoudt.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="freeze-h">
+    <div class="sec-head">
+      <h2 id="freeze-h">De freeze</h2>
+      <p>Voor bronhouders die hun collectie (nog) niet als Linked Data via het datasetregister kunnen leveren.</p>
+    </div>
+    <ol class="chain">
+      <li><strong>Huidige data</strong><span>De records zoals ze nu op Collectie Nederland staan.</span></li>
+      <li><strong>Eenmalige omzetting</strong><span>RCE zet de data om naar het nieuwe datamodel, inclusief normalisatie van het rechtenveld.</span></li>
+      <li><strong>Statische dataset</strong><span>Blijft staan tot uiterlijk 2030, of tot de bronhouder zelf via het register levert.</span></li>
+      <li class="fork"><strong>Waar komt het beeld vandaan?</strong>
+        <div class="fork-opts">
+          <div><span class="chip tone-ok">Embedden</span> Het record verwijst naar een URL bij de bronhouder.</div>
+          <div><span class="chip tone-stop">Hosten</span> Het beeld is overgezet uit de MediaManager.</div>
+        </div>
+      </li>
+    </ol>
+    <div class="open">
+      <h3>Let op</h3>
+      <p>Bevroren data volgt de bron niet. Haalt een bronhouder een beeld weg of past die de rechten aan, dan merkt Collectie Nederland dat niet vanzelf. Verwijderen na een melding moet RCE dan zelf regelen; dat raakt de plicht uit de DSA om prompt te handelen. Volgens de Q&A bij het rapport volstaat voor deze bronhouders een brief die uitlegt wat de freeze technisch doet.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="terms-h">
+    <div class="sec-head">
+      <h2 id="terms-h">Begrippen om af te spreken</h2>
+      <p>Hier ontstaan de meeste misverstanden tussen techniek en juridisch.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Begrip</th><th scope="col">Betekenis</th><th scope="col">Waar het misgaat</th></tr></thead>
+        <tbody>
+          <tr><td>Bronbestand</td><td>Het beeldbestand op een URL bij de bronhouder</td><td>Iets anders dan de bronpagina, de webpagina waarop het beeld getoond wordt</td></tr>
+          <tr><td>Embedden</td><td>Collectie Nederland toont het bronbestand; de browser haalt het bij de bronhouder op</td><td>Er is geen zichtbaar venster; de bezoeker ziet het verschil niet</td></tr>
+          <tr><td>Framen</td><td>De hele bronpagina in een venster op Collectie Nederland</td><td></td></tr>
+          <tr><td>Hosten</td><td>Het bestand staat op een server van RCE of van haar leverancier</td><td>Ook een ingehuurde leverancier telt: RCE verricht de handeling</td></tr>
+          <tr><td>Hosten op verzoek</td><td>Hosten in opdracht van de bronhouder, met mogelijk de hostingvrijstelling uit art. 6 DSA</td><td>Iets anders dan zelf hosten; of de vrijstelling opgaat voor rijksmusea is onzeker</td></tr>
+          <tr><td>Cachen</td><td>Een tijdelijke, ongewijzigde kopie tijdens een technisch proces, daarna weg</td><td>Een cache om later aan bezoekers te tonen is geen cachen meer</td></tr>
+          <tr><td>Thumbnail</td><td>Een verkleinde kopie die wordt opgeslagen</td><td>Juridisch hosten, ook als het grote beeld geëmbed wordt</td></tr>
+          <tr><td>Registratie</td><td>Gegevens over het object, voor het beheer (Rbr)</td><td>Hierop rust de aansluitplicht</td></tr>
+          <tr><td>Digitalisering</td><td>De digitale afbeelding, als middel om het object te identificeren (Rbr)</td><td>Valt niet samen met online tonen</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="q-h">
+    <div class="sec-head">
+      <h2 id="q-h">Vragen om samen te beantwoorden</h2>
+    </div>
+    <ol class="questions">
+      <li>Toont het nieuwe Collectie Nederland eigen thumbnails, of embedt het ook de kleine versies bij de bronhouder?</li>
+      <li>Worden beelden uit de MediaManager overgezet, en zo ja, voor welke collecties?</li>
+      <li>Verwijzen bevroren records naar beelden bij de bronhouder, of naar kopieën?</li>
+      <li>Hoe verwerkt Collectie Nederland een melding van inbreuk, ook voor bevroren data?</li>
+      <li>Welk onderdeel is “het systeem van de minister” uit de Rbr?</li>
+      <li>Wie beheert het datasetregister, en wat zeggen de voorwaarden daarvan over rechten?</li>
+    </ol>
+  </section>
+
+  <footer>
+    <p>Gebaseerd op het rapport ‘Auteursrecht x CollectieNederland’, de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollecties (Rbr). De technische beschrijving van de freeze volgt het rapport; de precieze inrichting moet in het overleg bevestigd worden.</p>
+  </footer>
+</div>
+
+<script>
+// Vier routes: waar staat het bestand, en welke verzoeken doet de browser van de bezoeker?
+const ROUTES = [
+  {
+    name: "Embedden", tone: ["ok", "Laag risico"], file: ["bron"],
+    arrows: [["cn", "1. pagina"], ["bron", "2. beeld"]],
+    facts: [
+      ["Bestand staat", "Bij de bronhouder"],
+      ["Handeling RCE", "Geen verveelvoudiging of openbaarmaking"],
+      ["Voorwaarde", "Vrij online bij de bronhouder, geen blokkade omzeild"]
+    ]
+  },
+  {
+    name: "Framen", tone: ["ok", "Laag risico"], file: ["bron"], frame: true,
+    arrows: [["cn", "1. pagina"], ["bron", "2. bronpagina"]],
+    facts: [
+      ["Bestand staat", "Bij de bronhouder"],
+      ["Handeling RCE", "Geen verveelvoudiging of openbaarmaking"],
+      ["Voorwaarde", "De bronpagina laat framen toe"]
+    ]
+  },
+  {
+    name: "Eigen thumbnails", tone: ["stop", "Middelmatig-hoog"], file: ["cn-small", "bron"],
+    arrows: [["cn", "1. pagina + thumb"], ["bron", "2. groot beeld"]], copy: "verkleind gekopieerd",
+    facts: [
+      ["Bestand staat", "Kleine kopie bij RCE, groot beeld bij de bronhouder"],
+      ["Handeling RCE", "Verveelvoudiging en bewerking"],
+      ["Voorwaarde", "Toestemming die de thumbnails expliciet noemt"]
+    ]
+  },
+  {
+    name: "Hosten", tone: ["stop", "Toestemming nodig"], file: ["cn"], idleBron: true,
+    arrows: [["cn", "pagina + beeld"]], copy: "eenmalig gekopieerd",
+    facts: [
+      ["Bestand staat", "Bij RCE of haar leverancier, bijvoorbeeld na overzetten uit de MediaManager"],
+      ["Handeling RCE", "Verveelvoudiging en openbaarmaking"],
+      ["Voorwaarde", "Toestemming, of hosten op verzoek (art. 6 DSA, onzeker voor rijksmusea)"]
+    ]
+  }
+];
+
+const BOX = {
+  you: { x: 6, y: 78, w: 96, h: 60, t: "Bezoeker", s: "browser" },
+  cn: { x: 196, y: 8, w: 158, h: 64, t: "Collectie Nederland", s: "server RCE" },
+  bron: { x: 196, y: 144, w: 158, h: 64, t: "Bronhouder", s: "server museum" }
+};
+
+function fileIcon(x, y, small, label) {
+  const w = small ? 12 : 16, h = small ? 15 : 20, f = small ? 4 : 5;
+  return `<g aria-hidden="true">
+    <path class="file" d="M${x} ${y}h${w - f}l${f} ${f}v${h - f}h-${w}z"/>
+    <path class="file-fold" d="M${x + w - f} ${y}l${f} ${f}h-${f}z"/>
+    ${label ? `<text class="file-t" x="${x - 4}" y="${y + h - 4}" text-anchor="end">${label}</text>` : ""}</g>`;
+}
+
+function flowSvg(r, i) {
+  const has = (k) => r.file.some((f) => f.startsWith(k));
+  const box = (k) => {
+    const b = BOX[k];
+    const cls = ["box", has(k) ? "has-file" : "", k === "bron" && r.idleBron ? "idle" : ""].join(" ");
+    return `<rect class="${cls}" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="9"/>
+      <text class="bt" x="${b.x + 10}" y="${b.y + 25}">${b.t}</text>
+      <text class="bs" x="${b.x + 10}" y="${b.y + 42}">${b.s}</text>`;
+  };
+  const you = BOX.you;
+  const start = { cn: [you.x + you.w, you.y + 18], bron: [you.x + you.w, you.y + you.h - 18] };
+  const end = { cn: [BOX.cn.x - 3, BOX.cn.y + 40], bron: [BOX.bron.x - 3, BOX.bron.y + 24] };
+  const lbl = { cn: [150, 62], bron: [152, 162] };
+  let arrows = r.arrows.map(([to, text]) => {
+    const [x1, y1] = start[to], [x2, y2] = end[to];
+    const mx = (x1 + x2) / 2;
+    return `<path class="arrow" d="M${x1} ${y1} C${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}" marker-end="url(#mk${i})"/>
+      <text class="al" x="${lbl[to][0]}" y="${lbl[to][1]}" text-anchor="middle">${text}</text>`;
+  }).join("");
+  if (r.copy) {
+    arrows += `<path class="arrow copy" d="M300 ${BOX.bron.y - 2} V${BOX.cn.y + BOX.cn.h + 4}" marker-end="url(#mkc${i})"/>
+      <text class="al copy" x="294" y="${(BOX.cn.y + BOX.cn.h + BOX.bron.y) / 2 + 4}" text-anchor="end">${r.copy}</text>`;
+  }
+  let files = "";
+  if (r.file.includes("bron")) files += fileIcon(332, 180);
+  if (r.file.includes("cn")) files += fileIcon(332, 44);
+  if (r.file.includes("cn-small")) files += fileIcon(336, 48, true, "thumb");
+  const frame = r.frame ? `<rect class="frame" x="290" y="42" width="56" height="24" rx="4"/><text class="file-t" x="318" y="57" text-anchor="middle">venster</text>` : "";
+  return `<svg class="flow" viewBox="0 0 360 216" role="img" aria-label="${r.name}: ${r.facts[0][1]}">
+    <defs>
+      <marker id="mk${i}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="mk" d="M0 0 10 5 0 10z"/></marker>
+      <marker id="mkc${i}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="mk-copy" d="M0 0 10 5 0 10z"/></marker>
+    </defs>
+    ${box("you")}${box("cn")}${box("bron")}${arrows}${files}${frame}
+  </svg>`;
+}
+
+document.getElementById("routes").innerHTML = ROUTES.map((r, i) => `
+  <article class="route">
+    <div class="route-top"><h3>${r.name}</h3><span class="chip tone-${r.tone[0]}">${r.tone[1]}</span></div>
+    ${flowSvg(r, i)}
+    <dl class="facts">${r.facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+  </article>`).join("");
+</script>
+</body>
+</html>

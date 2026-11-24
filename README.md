@@ -47,15 +47,19 @@ Onder het schema staat een tabel met de rechtenstatements die Europeana acceptee
 
 | Bestand | Doel |
 | --- | --- |
-| `keuzehulp.html` | De bron. Hieruit wordt ook het Claude-artifact op claude.ai gepubliceerd; dat voegt zelf het HTML-skelet toe. |
+| `keuzehulp.html` | Bron van de keuzehulp. Hieruit wordt ook het Claude-artifact op claude.ai gepubliceerd; dat voegt zelf het HTML-skelet toe. |
 | `index.html` | De keuzehulp voor GitHub Pages, gemaakt door `maak-index.py`. Pas dit bestand niet met de hand aan. |
-| `maak-index.py` | Zet het HTML-skelet om `keuzehulp.html` heen en schrijft `index.html`. |
+| `beeldroutes.html` | Bron van de overlegpagina ‘Hoe komt het beeld op Collectie Nederland?’: embedden, framen, thumbnails en hosten naast elkaar, met het NDE-datasetregister en de freeze. |
+| `beeldroutes/index.html` | De overlegpagina voor GitHub Pages, gemaakt door `maak-index.py`. Pas dit bestand niet met de hand aan. |
+| `maak-index.py` | Zet het HTML-skelet om de bronbestanden heen en schrijft de Pages-versies. |
 | `.gitignore` | Houdt de originele brondocumenten (`*.pdf`, `*.docx`) buiten de repository. |
 
 ## Inhoud aanpassen
 
-1. Pas `keuzehulp.html` aan. De vragen, uitleg en uitkomsten staan in het object `N` bovenaan het script, de rechtenstatements in `RS`. De ligging van de pijlen in het schema staat in `EDGES`.
-2. Voer het script uit:
+1. Pas het bronbestand aan, nooit de Pages-versie.
+   - In `keuzehulp.html` staan de vragen, uitleg en uitkomsten in het object `N` bovenaan het script, de rechtenstatements in `RS` en de ligging van de pijlen in het schema in `EDGES`.
+   - In `beeldroutes.html` staan de vier routes in `ROUTES` onderaan de pagina; de rest is gewone HTML.
+2. Voer het script uit; het werkt beide Pages-versies bij:
 
    ```bash
    python maak-index.py
@@ -63,7 +67,7 @@ Onder het schema staat een tabel met de rechtenstatements die Europeana acceptee
 
 ## Lokaal bekijken
 
-Open `index.html` in een browser. De lettertypen komen van Google Fonts. Zonder internetverbinding valt de pagina terug op systeemlettertypen.
+Open `index.html` of `beeldroutes/index.html` in een browser. Op GitHub Pages staat de overlegpagina onder `/beeldroutes/`. De lettertypen komen van Google Fonts. Zonder internetverbinding valt de pagina terug op systeemlettertypen.
 
 ## Publiceren op GitHub Pages
 
