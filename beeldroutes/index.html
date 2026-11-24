@@ -140,11 +140,9 @@ section { display: grid; gap: 18px; }
   background: var(--accent); color: var(--on-accent);
 }
 .chain strong { font-weight: 600; }
-.chain span { color: var(--muted); font-size: .92rem; }
-.chain li.fork { border-color: var(--warn); }
-.chain li.fork::before { background: var(--warn); color: var(--surface); }
-.fork-opts { display: grid; gap: 6px; margin-top: 4px; }
-.fork-opts div { font-size: .92rem; }
+.chain li > span { color: var(--muted); font-size: .92rem; }
+.fork-opts { display: grid; gap: 8px; margin-top: 4px; }
+.fork-opts div { font-size: .92rem; color: var(--muted); display: grid; gap: 4px; justify-items: start; }
 
 .open {
   border: 1.5px solid var(--warn); background: var(--warn-soft); border-radius: 12px; padding: 14px 16px;
@@ -203,7 +201,7 @@ a { color: var(--accent); }
         <p>Embedden is alleen geen nieuwe openbaarmaking als het werk al vrij en rechtmatig op het open internet staat. Staat het bestand er alleen voor Collectie Nederland, of achter een inlog, dan bereik je een nieuw publiek en is toestemming van de rechthebbende nodig.</p>
       </div>
     </div>
-    <p class="takeaway">Dat iets technisch werkt, zegt niets over de juridische route. Daarom vraagt het stroomschema: <strong>toont de bronhouder het werk zelf ook op diens eigen website?</strong></p>
+    <p class="takeaway">Dat iets technisch werkt, zegt niets over de juridische route. Daarom vraagt het <a href="../">stroomschema in de keuzehulp</a>: <strong>toont de bronhouder het werk zelf ook op diens eigen website?</strong></p>
   </section>
 
   <section aria-labelledby="ndr-h">
@@ -233,7 +231,7 @@ a { color: var(--accent); }
       <li><strong>Huidige data</strong><span>De records zoals ze nu op Collectie Nederland staan.</span></li>
       <li><strong>Eenmalige omzetting</strong><span>RCE zet de data om naar het nieuwe datamodel, inclusief normalisatie van het rechtenveld.</span></li>
       <li><strong>Statische dataset</strong><span>Blijft staan tot uiterlijk 2030, of tot de bronhouder zelf via het register levert.</span></li>
-      <li class="fork"><strong>Waar komt het beeld vandaan?</strong>
+      <li><strong>Waar komt het beeld vandaan?</strong>
         <div class="fork-opts">
           <div><span class="chip tone-ok">Embedden</span> Het record verwijst naar een URL bij de bronhouder.</div>
           <div><span class="chip tone-stop">Hosten</span> Het beeld is overgezet uit de MediaManager.</div>
@@ -284,6 +282,7 @@ a { color: var(--accent); }
   </section>
 
   <footer>
+    <p>Mag een concreet werk getoond worden? Loop dan de keuzehulp door: <a href="../">Mag het op Collectie Nederland?</a></p>
     <p>Gebaseerd op het rapport ‘Auteursrecht x CollectieNederland’, de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollecties (Rbr). De technische beschrijving van de freeze volgt het rapport; de precieze inrichting moet in het overleg bevestigd worden.</p>
   </footer>
 </div>
