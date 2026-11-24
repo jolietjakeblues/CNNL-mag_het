@@ -21,6 +21,20 @@ PAGINAS = {
     ),
 }
 
+# Artifact-links tussen de pagina's, met het pad naar de Pages-versie vanuit elk Pages-bestand
+ARTIFACTS = {
+    "https://claude.ai/artifact/F1HRxLwFM1q3NXegzsKrrM": "index.html",
+    "https://claude.ai/artifact/82Pj6LJuopa5X38inneiat": "beeldroutes/index.html",
+}
+
+
+def lokale_link(van, naar):
+    """Relatief pad van het ene Pages-bestand naar het andere, zonder 'index.html'."""
+    omhoog = "../" * van.count("/")
+    doel = naar.removesuffix("index.html")
+    return (omhoog + doel) or "./"
+
+
 RESET = """
 /* Basisreset (op claude.ai voegt het artifact-skelet dit zelf toe) */
 :root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -42,6 +56,8 @@ for bron, (doel, beschrijving) in PAGINAS.items():
     head, body = src.split("</style>\n", 1)
     head = head.replace('<meta name="claude:viewport-fit-sides" content="cover">\n', "")
     head = head.replace("<style>\n", "<style>" + RESET, 1)
+    for url, naar in ARTIFACTS.items():
+        body = body.replace(url, lokale_link(doel, naar))
 
     out = HEAD.format(beschrijving=beschrijving) + head + "</style>\n</head>\n<body>\n" + body.rstrip() + "\n</body>\n</html>\n"
     pad = HIER / doel
