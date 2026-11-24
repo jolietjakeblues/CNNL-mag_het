@@ -71,6 +71,7 @@ h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-
 p { margin: 0; }
 code { font-family: var(--f-mono); font-size: .88em; padding: 1px 5px; border-radius: 4px; background: var(--paper); border: 1px solid var(--line); }
 button { font: inherit; color: inherit; }
+a { color: var(--accent); }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 
 .eyebrow {
@@ -442,11 +443,15 @@ footer {
 
   <footer>
     <p>Gebaseerd op het stroomdiagram en het rapport ‘Auteursrecht x CollectieNederland’ (RCE), de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollecties (Rbr). Deel 1, over welke rechten het gaat en wat er in het rechtenveld staat, en de keuze voor eigen thumbnails zijn aanvullingen op het stroomdiagram.</p>
+    <p>Hoe embedden, framen, thumbnails en hosten technisch werken, en wat het NDE-datasetregister en de freeze doen: <a href="beeldroutes/">Hoe komt het beeld op Collectie Nederland?</a></p>
     <p>De keuzehulp geeft richting bij de keuze. Twijfel je over een concreet werk, overleg dan met een jurist.</p>
   </footer>
 </div>
 
 <script>
+// Overlegpagina met schetsen van de routes; maak-index.py maakt hier op GitHub Pages een lokale link van
+const OVERLEG = "beeldroutes/";
+
 // Peiljaar voor publiek domein: auteursrecht loopt tot 1 januari, 70 jaar na het sterfjaar.
 const Y = new Date().getFullYear();
 const PD = Y - 71;
@@ -533,7 +538,8 @@ const N = {
     help: `<p><strong>Embedden en framen:</strong> het werk staat niet op servers van RCE. De bezoeker haalt het rechtstreeks bij de bronhouder op, dus RCE verricht zelf geen auteursrechtelijke handeling.</p>
       <p><strong>Eigen thumbnails:</strong> een verkleinde kopie maken en opslaan is verveelvoudiging en bewerking, ook als je het grote beeld embedt (HvJ EU, VG Bild-Kunst, C-392/19). Volgens de Q&A bij het rapport is dit het grootste risico: één probleem raakt meteen alle thumbnails.</p>
       <p><strong>Hosten:</strong> RCE maakt een kopie en zet die online. Dat is verveelvoudiging en openbaarmaking, waarvoor toestemming nodig is.</p>
-      <p class="tip">Kort cachen tijdens een technisch proces, waarna het bestand weer verdwijnt, telt niet als hosten. Een thumbnail die op het moment van opvragen wordt gemaakt en daarna weer verdwijnt, ook niet.</p>`
+      <p class="tip">Kort cachen tijdens een technisch proces, waarna het bestand weer verdwijnt, telt niet als hosten. Een thumbnail die op het moment van opvragen wordt gemaakt en daarna weer verdwijnt, ook niet.</p>
+      <p class="tip">Hoe de vier manieren technisch werken, staat in schetsen op <a href="${OVERLEG}">Hoe komt het beeld op Collectie Nederland?</a></p>`
   },
   q2: {
     type: "q", phase: 2,
