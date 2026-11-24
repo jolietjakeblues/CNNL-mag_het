@@ -2,7 +2,7 @@
 
 Klikbare keuzehulp bij de vraag: *mag ik dit werk op CollectieNederland.nl tonen?*
 
-De keuzehulp volgt het stroomdiagram van de RCE en de toelichting uit het rapport ‘Auteursrecht x CollectieNederland’, de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollectie en subsidiëring museale instellingen (Rbr). Daarna krijg je een uitkomst met de reden, de vervolgstappen en eventuele signalen over het rechtenveld.
+De keuzehulp volgt het stroomdiagram van de RCE en de toelichting uit het rapport ‘Auteursrecht x CollectieNederland’, de Q&A bij dat rapport, de Begrippenlijst auteursrecht en aanverwante rechten, en de Erfgoedwet en de Regeling beheer rijkscollectie en subsidiëring museale instellingen (Rbr). Daarna krijg je een uitkomst met de reden, de vervolgstappen en eventuele signalen over het rechtenveld.
 
 ## Opbouw
 
@@ -41,7 +41,9 @@ Bij elke uitkomst staan het risico voor RCE, de juridische grondslag en wat je d
 
 ## Rechtenstatements vertaald
 
-Onder het schema staat een tabel met de rechtenstatements die Europeana accepteert: PDM, NoC-NC, NoC-OKLR, CC0, de CC-licenties, InC, InC-EDU, InC-OW-EU, CNE en UND, plus een leeg veld. Per statement zie je wat het betekent, of het toestemming geeft en waar je in de keuzehulp terechtkomt. Met **Start** begin je direct met dat statement.
+Onder het schema staat een tabel met alle waarden uit de RCE-thesaurus [Rechtenstatus en gebruiksrechten](https://data.cultureelerfgoed.nl/rights.html), met hun Nederlandse labels. Net als de thesaurus scheidt de tabel de **rechtenstatus** (de twaalf rights statements van RightsStatements.org plus Publiek domein) van het **gebruiksrecht** (CC0 en de CC-licenties, alleen als er een rechthebbende is). Waarden die Europeana niet accepteert, zijn gemarkeerd. Per waarde zie je wat die betekent, of die toestemming geeft en waar je in de keuzehulp terechtkomt. Elke code linkt naar de officiële uitleg; met **Start** begin je direct met die waarde.
+
+De signalen voor het rechtenveld noemen de juiste waarde met de URI uit de thesaurus.
 
 ## Bestanden
 

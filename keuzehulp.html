@@ -336,9 +336,16 @@ a { color: var(--accent); }
 }
 .rs td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .rs tr:last-child td { border-bottom: 0; }
-.rs .code { font-family: var(--f-mono); font-weight: 500; white-space: nowrap; }
+.rs .label { display: block; font-weight: 600; }
+.rs .codes { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 3px; }
+.rs .code { font-family: var(--f-mono); font-size: 13px; font-weight: 500; white-space: nowrap; }
+.rs .not-eu {
+  display: inline-block; margin-top: 6px; font-family: var(--f-mono); font-size: 11px; letter-spacing: .04em;
+  padding: 1px 7px; border-radius: 4px; border: 1px solid var(--line-strong); color: var(--muted);
+}
 .rs .name { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
 .rs .group td { background: var(--paper); font-weight: 700; font-family: var(--f-display); font-size: 1rem; }
+.rs .group .sub { font-family: var(--f-body); font-weight: 500; color: var(--muted); font-size: .9rem; }
 .rs .start {
   background: none; border: 1px solid var(--line-strong); border-radius: 8px;
   padding: 5px 10px; font-weight: 600; font-size: 13px; cursor: pointer; white-space: nowrap;
@@ -399,7 +406,7 @@ footer {
   <section class="statements" aria-labelledby="rs-h">
     <div class="section-head">
       <h2 id="rs-h">Rechtenstatements vertaald</h2>
-      <p>Wat elk statement in het rechtenveld betekent, of het toestemming geeft, en waar je in de keuzehulp terechtkomt. Met ‘Start’ begin je direct met dat statement.</p>
+      <p>Alle waarden uit de RCE-thesaurus <a href="https://data.cultureelerfgoed.nl/rights.html">Rechtenstatus en gebruiksrechten</a>, met de Nederlandse labels. Die thesaurus kan dienen als lijst met toegestane waarden voor het rechtenveld. De rechtenstatus zegt of een werk beschermd is; het gebruiksrecht zegt wat de rechthebbende toestaat. Klik op een code voor de officiële uitleg, of op ‘Start’ om de keuzehulp met die waarde te beginnen.</p>
     </div>
     <div class="table-wrap"><table class="rs" id="rs-table"></table></div>
   </section>
@@ -414,26 +421,30 @@ footer {
       <div><dt>Embedden</dt><dd>Je plaatst een verwijzing naar het bronbestand. De browser van de bezoeker haalt het beeld rechtstreeks bij de bronhouder op. RCE slaat niets op.</dd></div>
       <div><dt>Framen</dt><dd>Je toont een venster op de pagina van de bronhouder waar het werk op staat. Ook dan staat het werk niet op servers van RCE.</dd></div>
       <div><dt>Hyperlink</dt><dd>Een gewone link naar de bron, zonder het werk te tonen. Linken naar rechtmatig online geplaatst materiaal mag vrijwel altijd.</dd></div>
-      <div><dt>Hosten</dt><dd>Het bestand staat op een server van RCE. Dat is verveelvoudiging en openbaarmaking: daarvoor is toestemming nodig, en RCE is zelf aansprakelijk.</dd></div>
+      <div><dt>Hosten</dt><dd>RCE heeft een kopie van de afbeelding op haar eigen server, of die van haar leverancier, en zet die online op CollectieNederland.nl. Het kopiëren en online zetten zijn auteursrechtelijke handelingen. Zonder toestemming is dat een inbreuk, en RCE is daar zelf volledig voor aansprakelijk.</dd></div>
       <div><dt>Cachen</dt><dd>Een tijdelijke, ongewijzigde kopie voor een technisch proces, die daarna weer wordt gewist. Dat mag. Een cache om later aan bezoekers te tonen mag niet zonder afspraken.</dd></div>
       <div><dt>Thumbnail</dt><dd>Een verkleinde kopie. Zelf thumbnails maken en opslaan is een bewerking en verveelvoudiging, dus toestemming nodig (HvJ EU, VG Bild-Kunst, C-392/19). Een thumbnail die bij het opvragen wordt gemaakt en daarna verdwijnt, is caching.</dd></div>
       <div><dt>MediaManager</dt><dd>De huidige opslag van beelden bij de leverancier van Collectie Nederland. Beelden daaruit overzetten naar een eigen omgeving is een verveelvoudiging, en daarna host RCE ze.</dd></div>
-      <div><dt>Bronhouder</dt><dd>De instelling die de collectiegegevens en beelden levert, meestal via het NDE-datasetregister.</dd></div>
-      <div><dt>Rechthebbende</dt><dd>De maker of diens erfgenamen of vertegenwoordiger. Alleen de rechthebbende kan toestemming geven of een CC-licentie toekennen.</dd></div>
-      <div><dt>Pictoright</dt><dd>Auteursrechtorganisatie voor beeldmakers. Haar overeenkomsten met instellingen beperken of verbieden vaak het embedden door derden.</dd></div>
+      <div><dt>Bronhouder</dt><dd>De instelling die de collectiegegevens en beelden levert, meestal via het NDE-datasetregister. Bij de rijkscollectie is dat ook de beheerder van de rijkscollectie.</dd></div>
+      <div><dt>Rechthebbende</dt><dd>De maker, diens erfgenamen, of wie de rechten heeft gekregen. Dat kan ook een vertegenwoordiger zijn, zoals Pictoright. Alleen de rechthebbende kan toestemming geven of een CC-licentie toekennen.</dd></div>
+      <div><dt>Collectieve beheersorganisatie</dt><dd>Een organisatie (CBO) die de rechten van een groep makers behartigt, licenties geeft en vergoedingen int. Voor beeldmakers is dat Pictoright.</dd></div>
+      <div><dt>Pictoright</dt><dd>De collectieve beheersorganisatie voor beeldmakers. Haar overeenkomsten met instellingen beperken of verbieden vaak het embedden door derden.</dd></div>
       <div><dt>CC-licentie</dt><dd>Geeft actief toestemming om het werk te gebruiken en door te plaatsen, onder de voorwaarden van de licentie.</dd></div>
-      <div><dt>Rights Statement</dt><dd>Beschrijft alleen de rechtenstatus, bijvoorbeeld InCopyright. Het geeft geen toestemming en verandert niets aan de aansprakelijkheid.</dd></div>
+      <div><dt>Rights Statement</dt><dd>Geeft de rechtenstatus aan die de bronhouder heeft meegegeven, bijvoorbeeld Auteursrechtelijk beschermd (InC). Het is een machineleesbare verklaring van RightsStatements.org, bedoeld voor als er geen CC-licentie gegeven kan worden. Er zijn er twaalf. Het geeft geen toestemming en verandert niets aan de aansprakelijkheid.</dd></div>
+      <div><dt>Rechtenstatus en gebruiksrecht</dt><dd>Twee verschillende dingen. De rechtenstatus zegt of een werk beschermd is (een rights statement of Publiek domein). Het gebruiksrecht zegt wat de rechthebbende toestaat (een CC-licentie of CC0). De RCE-thesaurus <a href="https://data.cultureelerfgoed.nl/rights.html">Rechtenstatus en gebruiksrechten</a> houdt ze apart.</dd></div>
+      <div><dt>CC0</dt><dd>Een verklaring waarmee de rechthebbende afstand doet van zijn rechten, voor zover de wet dat toelaat. Geen licentie. Het rapport raadt CC0 af voor museale collecties.</dd></div>
+      <div><dt>Public Domain Mark</dt><dd>Een markering voor werken die niet (meer) auteursrechtelijk beschermd zijn. Geen licentie: er is niemand die toestemming hoeft te geven.</dd></div>
       <div><dt>Portretrecht</dt><dd>Staan er herkenbare personen op een foto, dan kunnen die zich soms tegen publicatie verzetten. Dat staat los van het auteursrecht.</dd></div>
       <div><dt>Naburige rechten</dt><dd>Rechten van uitvoerende kunstenaars, zoals acteurs en muzikanten, op opnames van hun uitvoering. Die spelen bij geluid en video, naast het auteursrecht.</dd></div>
       <div><dt>Erfgoedwet</dt><dd>De wet over het beheer van de rijkscollectie. Art. 2.2 vraagt de toegankelijkheid te bevorderen; dat is een inspanningsverplichting, geen plicht om alles online te tonen.</dd></div>
       <div><dt>Rbr</dt><dd>Regeling beheer rijkscollectie en subsidiëring museale instellingen: de ministeriële regeling met nadere regels bij de Erfgoedwet. Art. 2.2 verplicht beheerders van de rijkscollectie hun registratie actueel te houden en aan te sluiten op het systeem van de minister.</dd></div>
       <div><dt>DSA</dt><dd>Digital Services Act, de Europese verordening over online diensten. Art. 6 geeft een hoster vrijstelling van aansprakelijkheid onder voorwaarden, zoals prompt handelen na een melding.</dd></div>
-      <div><dt>Notice and takedown</dt><dd>Krijgt RCE een melding van inbreuk, dan moet het werk of de link onverwijld van het platform af.</dd></div>
+      <div><dt>Notice and action</dt><dd>Voorheen notice and takedown. Een hoster moet het makkelijk maken om illegale inhoud te melden (art. 16 DSA). Krijgt RCE een melding van inbreuk, dan moet het werk of de link onverwijld van het platform af.</dd></div>
     </dl>
   </section>
 
   <footer>
-    <p>Gebaseerd op het stroomdiagram en het rapport ‘Auteursrecht x CollectieNederland’ (RCE), de Q&A bij dat rapport, en de Erfgoedwet en de Regeling beheer rijkscollectie en subsidiëring museale instellingen (Rbr). Deel 1, over welke rechten het gaat en wat er in het rechtenveld staat, en de keuze voor eigen thumbnails zijn aanvullingen op het stroomdiagram.</p>
+    <p>Gebaseerd op het stroomdiagram en het rapport ‘Auteursrecht x CollectieNederland’ (RCE), de Q&A bij dat rapport, de Begrippenlijst auteursrecht en aanverwante rechten, de RCE-thesaurus Rechtenstatus en gebruiksrechten, en de Erfgoedwet en de Regeling beheer rijkscollectie en subsidiëring museale instellingen (Rbr). Deel 1, over welke rechten het gaat en wat er in het rechtenveld staat, en de keuze voor eigen thumbnails zijn aanvullingen op het stroomdiagram.</p>
     <p>Hoe embedden, framen, thumbnails en hosten technisch werken, en wat het NDE-datasetregister en de freeze doen: <a href="https://claude.ai/artifact/82Pj6LJuopa5X38inneiat">Hoe komt het beeld op Collectie Nederland?</a></p>
     <p>De keuzehulp geeft richting bij de keuze. Twijfel je over een concreet werk, overleg dan met een jurist.</p>
   </footer>
@@ -447,8 +458,8 @@ const OVERLEG = "https://claude.ai/artifact/82Pj6LJuopa5X38inneiat";
 const Y = new Date().getFullYear();
 const PD = Y - 71;
 
-// Waarom alleen de beschrijving tonen verdedigbaar is
-const ERFGOEDWET = "Alleen de beschrijving tonen is verdedigbaar. Art. 2.2 Erfgoedwet vraagt de toegankelijkheid te bevorderen; dat is een inspanningsverplichting. De aansluitplicht uit art. 2.2 Rbr gaat over de registratie, niet over het tonen van afbeeldingen.";
+// Waarom alleen de beschrijving tonen past binnen de Erfgoedwet
+const ERFGOEDWET = "Alleen de beschrijving tonen past binnen de Erfgoedwet. Art. 2.2 Erfgoedwet vraagt de toegankelijkheid te bevorderen; dat is een inspanningsverplichting, geen plicht om elk beeld online te tonen. De aansluitplicht uit art. 2.2 Rbr gaat over de registratie, niet over het tonen van afbeeldingen.";
 
 const N = {
   // Deel 1: welke rechten, en wat staat er in het rechtenveld?
@@ -458,17 +469,17 @@ const N = {
     map: ["Wat staat er in", "het rechtenveld?"], x: 500, y: 20, w: 230,
     answers: [
       { label: "Publiek domein", short: "publiek domein", to: "p2",
-        hint: "Public Domain Mark (PDM), of een No Copyright-statement zoals NoC-NC of NoC-OKLR." },
+        hint: "Publiek domein (PDM), of Niet auteursrechtelijk beschermd met een beperking (NoC-NC, NoC-OKLR, NoC-CR)." },
       { label: "CC0 of een Creative Commons-licentie", short: "CC0 / CC", to: "p4",
         hint: "CC0, CC BY, CC BY-SA, CC BY-NC of een van de andere CC-licenties." },
       { label: "In Copyright", short: "In Copyright", to: "q1",
-        hint: "InC, InC-EDU of InC-OW-EU: het werk is beschermd." },
-      { label: "Niet beoordeeld, onbepaald of leeg", short: "onbekend", to: "p2",
-        hint: "Copyright Not Evaluated (CNE), Copyright Undetermined (UND), of er staat niets." }
+        hint: "Auteursrechtelijk beschermd (InC), ook met een toevoeging zoals onderwijsgebruik of EU-weeswerk." },
+      { label: "Niet beoordeeld, onbekend of leeg", short: "onbekend", to: "p2",
+        hint: "Auteursrecht niet beoordeeld (CNE), Auteursrecht onbekend (UND), Geen bekend auteursrecht (NKC), alleen in de VS niet beschermd (NoC-US), of er staat niets." }
     ],
     help: `<p>Het rechtenveld (<code>edm:rights</code>, in SCHEMA-AP-NDE de licentie op het MediaObject) zegt wat de bronhouder over de rechten op de afbeelding opgeeft. Het verandert niets aan de aansprakelijkheid van RCE, maar het wijst je de weg.</p>
       <p>De kwaliteit van dit veld is vaak laag. Daarom controleer je in de volgende stap of het klopt.</p>
-      <p class="tip">Twijfel je welk statement bij welke keuze hoort? Kijk in de tabel ‘Rechtenstatements vertaald’ onderaan de pagina.</p>`
+      <p class="tip">Twijfel je welk statement bij welke keuze hoort? Kijk in de tabel ‘Rechtenstatements vertaald’ onderaan de pagina. Alle waarden staan in de RCE-thesaurus <a href="https://data.cultureelerfgoed.nl/rights.html">Rechtenstatus en gebruiksrechten</a>.</p>`
   },
   p2: {
     type: "q", phase: 1,
@@ -555,8 +566,10 @@ const N = {
       { label: "Nee", short: "Nee", to: "q4",
         hint: "Het beeld laadt gewoon als je het buiten de site van de bronhouder opvraagt." }
     ],
-    help: `<p>Een bronhouder mag technisch tegenhouden dat anderen zijn beelden embedden of framen. Soms is dat ook afgesproken met de rechthebbende. Zulke maatregelen omzeilen mag niet (HvJ EU, VG Bild-Kunst, C-392/19).</p>
-      <p class="tip">Laadt het beeld niet buiten de website van de bronhouder, krijg je een foutmelding, of opent de pagina niet in een frame? Dan is er waarschijnlijk een maatregel.</p>`
+    help: `<p>Een bronhouder mag technisch tegenhouden dat anderen zijn beelden embedden of framen. Soms is dat ook afgesproken met de rechthebbende. Heeft de bronhouder zo’n maatregel genomen, dan embed je het werk niet.</p>
+      <p>Een technische maatregel omzeil je nooit, ook niet als het technisch kan. Staat het werk achter een slot, zoals een inlog, dan blijft het daar (HvJ EU, VG Bild-Kunst, C-392/19).</p>
+      <p class="tip">Laadt het beeld niet buiten de website van de bronhouder, krijg je een foutmelding, of opent de pagina niet in een frame? Dan is er waarschijnlijk een maatregel.</p>
+      <p class="tip">Bij een beheerder van de rijkscollectie ligt zo’n maatregel niet voor de hand. Die moet geautomatiseerd kunnen aansluiten op het systeem van de minister (art. 2.2 Rbr) en zijn verplichtingen uit de Erfgoedwet nakomen. Kom je er toch een tegen, ga dan in gesprek met de bronhouder.</p>`
   },
   q4: {
     type: "q", phase: 2,
@@ -608,7 +621,7 @@ const N = {
     title: "Je mag het werk tonen onder de voorwaarden van de licentie.",
     risk: "Laag, als de licentie van de rechthebbende komt",
     basis: "Creative Commons-licentie of CC0-verklaring van de rechthebbende",
-    why: () => "Een CC-licentie of CC0-verklaring geeft actief toestemming om het werk te gebruiken en door te plaatsen, mits de rechthebbende die heeft gegeven. Collectie Nederland geeft de licentie door aan hergebruikers. Een licentie die niet klopt, kan RCE daardoor alsnog raken.",
+    why: () => "Een CC-licentie of CC0-verklaring geeft actief toestemming om het werk te gebruiken en door te plaatsen, mits de rechthebbende die heeft gegeven. Klopt de licentie niet en host RCE het werk, dan kan RCE alsnog aansprakelijk zijn voor het openbaarmaken ervan.",
     next: [
       "Neem de licentie ongewijzigd over en toon de naamsvermelding die de licentie vraagt.",
       "Leg vast waar de licentie vandaan komt, met een link naar de bron.",
@@ -629,6 +642,7 @@ const N = {
       "Vraag de bronhouder of de overeenkomst embedden door derden toestaat, en onder welke voorwaarden.",
       "Is embedden beperkt toegestaan? Maak bij het beeld duidelijk dat Collectie Nederland het niet zelf host, bijvoorbeeld met ‘Beeld afkomstig van [website bronhouder]’.",
       "Geen duidelijk antwoord? Toon dan alleen de beschrijving, met een link naar de pagina van de bronhouder.",
+      "Of sluit zelf een overeenkomst met Pictoright die embedden op Collectie Nederland toestaat. Dan mag embedden wel.",
       "Gaat het om de RCE-Kunstcollectie? Neem eerst contact op met Pictoright. Reken op een doorlooptijd van zes maanden tot twee jaar als er een nieuwe overeenkomst nodig is."
     ]
   },
@@ -658,7 +672,8 @@ const N = {
       "Omzeil de maatregel niet, ook niet door een eigen kopie of thumbnail te maken.",
       "Toon de beschrijving met een gewone link naar de pagina van de bronhouder. Linken naar rechtmatig online materiaal mag vrijwel altijd.",
       ERFGOEDWET,
-      "Wil je het beeld toch tonen? Vraag toestemming aan de rechthebbende en loop de keuzehulp opnieuw door via ‘zelf hosten’."
+      "Is de bronhouder een beheerder van de rijkscollectie? Bespreek de maatregel met de bronhouder: die moet kunnen aansluiten op het systeem van de minister.",
+      "Wil je het beeld toch tonen? Vraag toestemming aan de rechthebbende, of sluit een overeenkomst met Pictoright die dat toestaat, en loop de keuzehulp opnieuw door."
     ]
   },
   r_no_show: {
@@ -713,24 +728,34 @@ const EDGES = {
 };
 const BAND_H = 408;
 
-// Rechtenstatements zoals Europeana ze accepteert, met de keuze in vraag 1 (p1)
+// RCE-thesaurus Rechtenstatus en gebruiksrechten: labels en URI's komen daaruit
+const THESAURUS = "https://data.cultureelerfgoed.nl/rights.html";
+const rsPage = (code) => `https://rightsstatements.org/page/${code}/1.0/?language=nl`;
+const ccDeed = (path) => `https://creativecommons.org/${path}/deed.nl`;
+
+// Rechtenstatus en gebruiksrecht met de keuze in vraag 1 (p1); eu: false als Europeana het niet accepteert
 const RS = [
-  { group: "Publiek domein" },
-  { code: "PDM", name: "Public Domain Mark", says: "Het werk is publiek domein.", perm: ["ok", "Niet nodig"], pick: 0 },
-  { code: "NoC-NC", name: "No Copyright – Non-Commercial Use Only", says: "Geen auteursrecht, maar commercieel hergebruik is contractueel beperkt.", perm: ["ok", "Niet nodig voor tonen"], pick: 0 },
-  { code: "NoC-OKLR", name: "No Copyright – Other Known Legal Restrictions", says: "Geen auteursrecht, wel een andere wettelijke beperking, bijvoorbeeld privacy.", perm: ["warn", "Check de beperking"], pick: 0 },
-  { group: "Licenties" },
-  { code: "CC0", name: "Public Domain Dedication", says: "De rechthebbende doet afstand van zijn rechten.", perm: ["ok", "Ja"], pick: 1 },
-  { code: "CC BY · BY-SA · BY-ND", name: "Creative Commons", says: "Gebruik toegestaan, met naamsvermelding en eventueel delen onder dezelfde voorwaarden of zonder bewerking.", perm: ["ok", "Ja, onder voorwaarden"], pick: 1 },
-  { code: "CC BY-NC · BY-NC-SA · BY-NC-ND", name: "Creative Commons, niet-commercieel", says: "Als hierboven, maar alleen voor niet-commercieel gebruik.", perm: ["ok", "Ja, onder voorwaarden"], pick: 1 },
-  { group: "Beschermd" },
-  { code: "InC", name: "In Copyright", says: "Het werk is auteursrechtelijk beschermd.", perm: ["stop", "Nee"], pick: 2 },
-  { code: "InC-EDU", name: "In Copyright – Educational Use Permitted", says: "Beschermd; educatief gebruik is toegestaan.", perm: ["stop", "Nee, niet voor tonen op Collectie Nederland"], pick: 2 },
-  { code: "InC-OW-EU", name: "In Copyright – EU Orphan Work", says: "Verweesd werk volgens de EU-richtlijn: de rechthebbende is niet te vinden.", perm: ["stop", "Alleen voor de instelling die het registreerde"], pick: 2 },
-  { group: "Onbekend" },
-  { code: "CNE", name: "Copyright Not Evaluated", says: "De rechtenstatus is niet beoordeeld.", perm: ["stop", "Nee"], pick: 3 },
-  { code: "UND", name: "Copyright Undetermined", says: "Beoordeeld, maar niet vast te stellen.", perm: ["stop", "Nee"], pick: 3 },
-  { code: "—", name: "Leeg", says: "Er staat niets in het rechtenveld.", perm: ["stop", "Nee"], pick: 3 }
+  { group: "Rechtenstatus", sub: "Publiek domein en niet beschermd", href: "https://data.cultureelerfgoed.nl/rights/rechtenstatus.html" },
+  { label: "Publiek domein", codes: [["PDM", ccDeed("publicdomain/mark/1.0")]], says: "Het werk is publiek domein.", perm: ["ok", "Niet nodig"], pick: 0 },
+  { label: "Niet auteursrechtelijk beschermd – alleen niet-commercieel gebruik", codes: [["NoC-NC", rsPage("NoC-NC")]], says: "Geen auteursrecht, maar commercieel hergebruik is contractueel beperkt.", perm: ["ok", "Niet nodig voor tonen"], pick: 0 },
+  { label: "Niet auteursrechtelijk beschermd – andere wettelijke beperkingen", codes: [["NoC-OKLR", rsPage("NoC-OKLR")]], says: "Geen auteursrecht, wel een andere wettelijke beperking, bijvoorbeeld privacy.", perm: ["warn", "Check de beperking"], pick: 0 },
+  { label: "Niet auteursrechtelijk beschermd – contractuele beperkingen", codes: [["NoC-CR", rsPage("NoC-CR")]], says: "Geen auteursrecht, wel beperkingen uit een contract, bijvoorbeeld een schenkingsovereenkomst.", perm: ["warn", "Check het contract"], pick: 0, eu: false },
+  { label: "Niet auteursrechtelijk beschermd – Verenigde Staten", codes: [["NoC-US", rsPage("NoC-US")]], says: "Alleen in de Verenigde Staten niet beschermd. In Nederland kan het werk nog beschermd zijn.", perm: ["stop", "Nee, niet voor Nederland"], pick: 3, eu: false },
+  { label: "Geen bekend auteursrecht", codes: [["NKC", rsPage("NKC")]], says: "Na onderzoek is geen auteursrecht bekend, maar zeker is dat niet.", perm: ["warn", "Waarschijnlijk niet nodig"], pick: 3, eu: false },
+  { group: "Rechtenstatus", sub: "Beschermd" },
+  { label: "Auteursrechtelijk beschermd", codes: [["InC", rsPage("InC")]], says: "Het werk is auteursrechtelijk beschermd.", perm: ["stop", "Nee"], pick: 2 },
+  { label: "Auteursrechtelijk beschermd – onderwijsgebruik toegestaan", codes: [["InC-EDU", rsPage("InC-EDU")]], says: "Beschermd; gebruik voor onderwijs is toegestaan.", perm: ["stop", "Nee, niet voor tonen op Collectie Nederland"], pick: 2 },
+  { label: "Auteursrechtelijk beschermd – niet-commercieel gebruik toegestaan", codes: [["InC-NC", rsPage("InC-NC")]], says: "Beschermd; de rechthebbende staat niet-commercieel gebruik toe.", perm: ["warn", "Mogelijk; vraag de toestemming op"], pick: 2, eu: false },
+  { label: "Auteursrechtelijk beschermd – EU-weeswerk", codes: [["InC-OW-EU", rsPage("InC-OW-EU")]], says: "Verweesd werk volgens de EU-richtlijn: de rechthebbende is niet te vinden.", perm: ["stop", "Alleen voor de instelling die het registreerde"], pick: 2 },
+  { label: "Auteursrechtelijk beschermd – rechthebbende(n) niet-lokaliseerbaar of niet-identificeerbaar", codes: [["InC-RUU", rsPage("InC-RUU")]], says: "Beschermd, maar de rechthebbende is niet te vinden of niet bekend.", perm: ["stop", "Nee"], pick: 2, eu: false },
+  { group: "Rechtenstatus", sub: "Onbekend" },
+  { label: "Auteursrecht niet beoordeeld", codes: [["CNE", rsPage("CNE")]], says: "De rechtenstatus is niet uitgezocht.", perm: ["stop", "Nee"], pick: 3 },
+  { label: "Auteursrecht onbekend", codes: [["UND", rsPage("UND")]], says: "Uitgezocht, maar niet vast te stellen.", perm: ["stop", "Nee"], pick: 3, eu: false },
+  { label: "Leeg", codes: [], says: "Er staat niets in het rechtenveld.", perm: ["stop", "Nee"], pick: 3 },
+  { group: "Gebruiksrecht / licentie", sub: "Alleen als er een rechthebbende is", href: "https://data.cultureelerfgoed.nl/rights/gebruiksrecht-licentie.html" },
+  { label: "Verklaring: afstand van rechten", codes: [["CC0", ccDeed("publicdomain/zero/1.0")]], says: "De rechthebbende doet afstand van zijn rechten, voor zover de wet dat toelaat.", perm: ["ok", "Ja"], pick: 1 },
+  { label: "Creative Commons-licenties", codes: [["CC BY", ccDeed("licenses/by/4.0")], ["BY-SA", ccDeed("licenses/by-sa/4.0")], ["BY-ND", ccDeed("licenses/by-nd/4.0")]], says: "Gebruik toegestaan met naamsvermelding, eventueel onder dezelfde voorwaarden delen of zonder bewerking.", perm: ["ok", "Ja, onder voorwaarden"], pick: 1 },
+  { label: "Creative Commons-licenties, niet-commercieel", codes: [["BY-NC", ccDeed("licenses/by-nc/4.0")], ["BY-NC-SA", ccDeed("licenses/by-nc-sa/4.0")], ["BY-NC-ND", ccDeed("licenses/by-nc-nd/4.0")]], says: "Als hierboven, maar alleen voor niet-commercieel gebruik.", perm: ["ok", "Ja, onder voorwaarden"], pick: 1 }
 ];
 
 let steps = [{ id: "p1", pick: null }];
@@ -761,16 +786,21 @@ function contexts() {
   return out;
 }
 
-const SIGNAL_BASIS = "Bij rijkscollecties horen auteurs- en gebruiksrechten bij de registratie die de beheerder actueel moet houden (toelichting bij art. 2.2 Rbr). Herstel van het rechtenveld brengt volgens de Q&A bij het rapport zelf geen juridisch risico mee.";
+const URI_INC = "http://rightsstatements.org/vocab/InC/1.0/";
+const URI_PDM = "https://creativecommons.org/publicdomain/mark/1.0/";
+const SIGNAL_BASIS = `Bij rijkscollecties horen auteurs- en gebruiksrechten bij de registratie die de beheerder actueel moet houden (toelichting bij art. 2.2 Rbr). Herstel van het rechtenveld brengt volgens de Q&A bij het rapport zelf geen juridisch risico mee. De toegestane waarden staan in de RCE-thesaurus Rechtenstatus en gebruiksrechten: ${THESAURUS}`;
+
+// Maak URL's in platte tekst klikbaar voor op de pagina; de kopieertekst blijft plat
+const linkify = (s) => s.replace(/https?:\/\/[^\s]+[^\s.,)]/g, (u) => `<a href="${u}">${u}</a>`);
 
 // Wat er volgens je antwoorden niet klopt aan het rechtenveld
 function signals() {
   const f = pickOf("p1"), w = pickOf("p2"), out = [];
-  if (f === 0 && w === 0) out.push("Het rechtenveld zegt publiek domein, maar het werk is nog beschermd. Meld de fout aan de bronhouder.");
+  if (f === 0 && w === 0) out.push(`Het rechtenveld zegt publiek domein, maar het werk is nog beschermd. Meld de fout aan de bronhouder; de juiste waarde is Auteursrechtelijk beschermd: ${URI_INC}`);
   if (f === 0 && w === 2) out.push("Het rechtenveld zegt publiek domein, maar dat kon je niet bevestigen. Controleer maker en sterfjaar met de bronhouder.");
   if (f === 0 && w === 1 && pickOf("p3") === 1) out.push("Het rechtenveld zegt publiek domein, maar dat geldt alleen voor het object. De foto kan eigen rechten hebben; vraag de bronhouder de rechten op de foto apart te vermelden.");
-  if (f === 3 && w === 0) out.push("Het rechtenveld is leeg of onbepaald, terwijl het werk beschermd is. Vraag de bronhouder In Copyright (InC) in te vullen.");
-  if (f === 3 && w === 1) out.push("Het rechtenveld is leeg of onbepaald, terwijl het werk publiek domein is. Vraag de bronhouder de Public Domain Mark (PDM) in te vullen.");
+  if (f === 3 && w === 0) out.push(`Het rechtenveld is leeg of onbepaald, terwijl het werk beschermd is. Vraag de bronhouder Auteursrechtelijk beschermd in te vullen: ${URI_INC}`);
+  if (f === 3 && w === 1) out.push(`Het rechtenveld is leeg of onbepaald, terwijl het werk publiek domein is. Vraag de bronhouder Publiek domein in te vullen: ${URI_PDM}`);
   if (f === 1 && pickOf("p4") === 1) out.push("De CC-licentie is mogelijk niet door de rechthebbende gegeven. Neem haar niet over en meld dit aan de bronhouder.");
   return out;
 }
@@ -885,7 +915,7 @@ function renderStage() {
           <div><dt>Grondslag</dt><dd>${node.basis}</dd></div>
         </dl>
       </div>
-      ${sig.length ? `<div class="signals"><h3>Signaal voor het rechtenveld</h3><ul>${sig.map((s) => `<li>${s}</li>`).join("")}</ul><p class="basis">${SIGNAL_BASIS}</p></div>` : ""}
+      ${sig.length ? `<div class="signals"><h3>Signaal voor het rechtenveld</h3><ul>${sig.map((s) => `<li>${linkify(s)}</li>`).join("")}</ul><p class="basis">${linkify(SIGNAL_BASIS)}</p></div>` : ""}
       <div class="why"><h3>Waarom</h3><p>${node.why(steps)}</p></div>
       <div class="next"><h3>Wat nu</h3><ul>${node.next.map((n) => `<li>${n}</li>`).join("")}</ul></div>
       <div class="nav-row">
@@ -974,12 +1004,14 @@ function renderMap() {
 
 function renderTable() {
   const rows = RS.map((r) => r.group
-    ? `<tr class="group"><td colspan="4">${r.group}</td></tr>`
+    ? `<tr class="group"><td colspan="4">${r.href ? `<a href="${r.href}">${r.group}</a>` : r.group}<span class="sub"> · ${r.sub}</span></td></tr>`
     : `<tr>
-        <td><span class="code">${r.code}</span><span class="name">${r.name}</span></td>
+        <td><span class="label">${r.label}</span>
+          <span class="codes">${r.codes.map(([c, url]) => `<a class="code" href="${url}">${c}</a>`).join(" ")}</span>
+          ${r.eu === false ? '<span class="not-eu">Niet bij Europeana</span>' : ""}</td>
         <td>${r.says}</td>
         <td><span class="chip tone-${r.perm[0]}">${r.perm[1]}</span></td>
-        <td><button class="start" type="button" data-start="${r.pick}" title="Begin de keuzehulp met ${r.code}">Start →</button>
+        <td><button class="start" type="button" data-start="${r.pick}" title="Begin de keuzehulp met ${r.label}">Start →</button>
           <span class="name">${N.p1.answers[r.pick].label}</span></td>
       </tr>`).join("");
   $("#rs-table").innerHTML = `
