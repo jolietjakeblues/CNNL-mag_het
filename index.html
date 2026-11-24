@@ -540,6 +540,7 @@ const N = {
   q1: {
     type: "q", phase: 2,
     q: "Hoe ga je het werk tonen?",
+    note: "CollectieNederland.nl embedt, ook de kleine versies. De andere keuzes zijn er voor de volledigheid.",
     map: ["Hoe ga je het", "werk tonen?"], x: 640, y: 420, w: 200,
     answers: [
       { label: "Ik ga het werk embedden of framen", short: "embedden / framen", to: "q2",
@@ -595,7 +596,7 @@ const N = {
     ],
     help: `<p>Pictoright-overeenkomsten bevatten vaak afspraken over embedden door derden. De digitaliseringsovereenkomst tussen Pictoright en RCE eist bijvoorbeeld dat downloaden en embedden door derden wordt verhinderd.</p>
       <p>Bronhouders weten niet altijd wat er in hun overeenkomst staat. Daarom is ‘ja’ een reden om eerst na te vragen.</p>
-      <p class="tip">Gaat het om de RCE-Kunstcollectie? De huidige overeenkomst met Pictoright geldt alleen voor de Beeldbank. Of de Beeldbank in Collectie Nederland geëmbed mag worden, moet eerst met Pictoright worden afgestemd.</p>`
+      <p class="tip">Gaat het om de RCE-Kunstcollectie? Die komt via de Linked Data Voorziening van de RCE op Collectie Nederland; zie de <a href="${OVERLEG}">overlegpagina</a>.</p>`
   },
   q5: {
     type: "q", phase: 2,
@@ -654,9 +655,7 @@ const N = {
       "Vraag de bronhouder of de overeenkomst embedden door derden toestaat, en onder welke voorwaarden.",
       "Is embedden beperkt toegestaan? Maak bij het beeld duidelijk dat Collectie Nederland het niet zelf host, bijvoorbeeld met ‘Beeld afkomstig van [website bronhouder]’.",
       "Geen duidelijk antwoord? Toon dan alleen de beschrijving, met een link naar de pagina van de bronhouder.",
-      "Of sluit zelf een overeenkomst met Pictoright die embedden op Collectie Nederland toestaat. Dan mag embedden wel.",
-      "Gaat het om de RCE-Kunstcollectie? Neem eerst contact op met Pictoright. Reken op een doorlooptijd van zes maanden tot twee jaar als er een nieuwe overeenkomst nodig is."
-    ]
+      "Of sluit zelf een overeenkomst met Pictoright die embedden op Collectie Nederland toestaat. Dan mag embedden wel."    ]
   },
   r_low: {
     type: "r", tone: "ok", stamp: "Zeer laag risico",
@@ -893,6 +892,7 @@ function renderStage() {
       </div>
       <h2 id="stage-h" tabindex="-1">${node.q}</h2>
       ${node.phase === 2 ? ctx : ""}
+      ${node.note ? `<p class="context">${node.note}</p>` : ""}
       <div class="answers">
         ${node.answers.map((a, i) => `
           <button class="answer" type="button" data-i="${i}">

@@ -69,6 +69,34 @@ section { display: grid; gap: 18px; }
   background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
   padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0;
 }
+.route.is-cn { border: 2px solid var(--accent); }
+.route .flag {
+  justify-self: start; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 4px; border: 1px solid var(--line-strong); color: var(--muted);
+}
+.route.is-cn .flag { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.route:not(.is-cn) .note { background: var(--paper); }
+
+/* Zo werkt CN.nl */
+.cn-summary {
+  background: var(--accent-soft); border-radius: 14px; padding: 20px 22px; display: grid; gap: 10px; max-width: 80ch;
+}
+.cn-summary h2 { font-size: 1.35rem; font-weight: 600; }
+.cn-summary ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+
+/* Checklist */
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-width: 86ch; }
+.checklist li {
+  display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 4px 12px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+}
+.checklist li::before {
+  content: ""; grid-row: span 2; width: 18px; height: 18px; margin-top: 3px; border-radius: 5px;
+  border: 1.5px solid var(--accent);
+  background: linear-gradient(var(--accent), var(--accent)) center / 8px 8px no-repeat;
+}
+.checklist .src { font-family: var(--f-mono); font-size: 11px; letter-spacing: .04em; color: var(--muted); }
+
 .route-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .route h3 { font-size: 1.25rem; font-weight: 600; }
 .chip {
@@ -126,7 +154,8 @@ section { display: grid; gap: 18px; }
 .chain { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); counter-reset: step; }
 .chain li {
   position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
-  padding: 14px 14px 14px 46px; display: grid; gap: 4px; counter-increment: step; min-width: 0;
+  padding: 14px 14px 14px 46px; display: grid; gap: 4px; align-content: start; counter-increment: step; min-width: 0;
+  overflow-wrap: anywhere;
 }
 .chain li::before {
   content: counter(step); position: absolute; left: 12px; top: 13px; width: 24px; height: 24px; border-radius: 50%;
@@ -141,6 +170,7 @@ section { display: grid; gap: 18px; }
   display: grid; gap: 6px; max-width: 80ch;
 }
 .open h3 { font-size: 1rem; font-weight: 600; color: var(--warn); }
+.open ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
 
 /* Begrippen */
 .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
@@ -168,12 +198,39 @@ a { color: var(--accent); }
     <p>Waar het beeldbestand staat, bepaalt wie de auteursrechtelijke handeling verricht. Deze pagina zet de vier manieren van tonen naast elkaar, en beantwoordt de vragen over de bronpagina, het datasetregister en de freeze.</p>
   </header>
 
+  <section class="cn-summary" aria-labelledby="cn-h">
+    <h2 id="cn-h">Zo werkt CollectieNederland.nl (CN.nl)</h2>
+    <ul>
+      <li><strong>CN.nl embedt</strong>, ook de kleine versies. De beelden komen rechtstreeks van de bronhouder.</li>
+      <li><strong>CN.nl slaat geen beelden op</strong>: geen kopieën, geen eigen thumbnails.</li>
+      <li><strong>Bevroren records verwijzen naar de bronhouder.</strong> Ook daar is het embedden.</li>
+      <li><strong>Beelden op de MediaManager worden niet omgezet.</strong></li>
+      <li><strong>De RCE-Kunstcollectie komt via de Linked Data Voorziening van de RCE.</strong> Die route wordt nog juridisch getoetst; zie verderop.</li>
+    </ul>
+  </section>
+
   <section aria-labelledby="routes-h">
     <div class="sec-head">
       <h2 id="routes-h">Vier manieren om een beeld te tonen</h2>
       <p>Blauw omrand: daar staat het bestand. Het schermpje: de bronhouder toont het beeld ook op de eigen website. Een pijl is een verzoek van de browser van de bezoeker; de rode stippellijn is een kopie.</p>
     </div>
     <div class="routes" id="routes"></div>
+  </section>
+
+  <section aria-labelledby="check-h">
+    <div class="sec-head">
+      <h2 id="check-h">Embedden op CN.nl blijft zeer laag risico als</h2>
+      <p>Embedden is de enige route voor CN.nl. Dit zijn de voorwaarden. Voor een concreet werk loop je ze door in de <a href="https://claude.ai/artifact/F1HRxLwFM1q3NXegzsKrrM">keuzehulp</a>.</p>
+    </div>
+    <ul class="checklist">
+      <li><span>De bronhouder toont het beeld ook vrij toegankelijk op de eigen website, niet achter een inlog en niet alleen voor CN.nl.</span><span class="src">Rapport · stroomschema vraag 2</span></li>
+      <li><span>De bronhouder heeft geen technische maatregel tegen embedden genomen. CN.nl omzeilt er nooit een.</span><span class="src">HvJ EU, VG Bild-Kunst (C-392/19)</span></li>
+      <li><span>Er is geen afspraak met Pictoright of de rechthebbende die embedden verbiedt.</span><span class="src">Q&amp;A antwoord 14</span></li>
+      <li><span>De bronhouder bevestigt in de aansluitovereenkomst dat CN.nl mag embedden.</span><span class="src">Rapport, addendum · Q&amp;A antwoord 14</span></li>
+      <li><span>Er zijn geen aanwijzingen dat het beeld onrechtmatig online staat.</span><span class="src">Rapport</span></li>
+      <li><span>CN.nl slaat geen kopieën of thumbnails op; ook de kleine versies komen van de bronhouder.</span><span class="src">Rapport · Q&amp;A antwoord 9</span></li>
+      <li><span>CN.nl haalt een record of link onverwijld weg na een melding van inbreuk, ook bij bevroren data.</span><span class="src">Notice and action, art. 16 DSA</span></li>
+    </ul>
   </section>
 
   <section aria-labelledby="bron-h">
@@ -185,12 +242,12 @@ a { color: var(--accent); }
       <div class="verdict no">
         <span class="big">Nee</span>
         <h3>Technisch</h3>
-        <p>Embedden werkt zodra het bestand op een openbare URL staat, bijvoorbeeld <code>https://bronhouder.nl/beelden/1234.jpg</code>. Het hoeft op geen enkele webpagina van de bronhouder zichtbaar te zijn. Een bronhouder kan een bestand dus alleen voor Collectie Nederland klaarzetten.</p>
+        <p>Embedden werkt zodra het bestand op een openbare URL staat, bijvoorbeeld <code>https://bronhouder.nl/beelden/1234.jpg</code>. Het hoeft op geen enkele webpagina van de bronhouder zichtbaar te zijn. Een bronhouder kan een bestand dus alleen voor CN.nl klaarzetten.</p>
       </div>
       <div class="verdict yes">
         <span class="big">Ja</span>
         <h3>Juridisch</h3>
-        <p>Embedden is alleen geen nieuwe openbaarmaking als het werk al vrij en rechtmatig op het open internet staat. Staat het bestand er alleen voor Collectie Nederland, of achter een inlog, dan bereik je een nieuw publiek en is toestemming van de rechthebbende nodig.</p>
+        <p>Embedden is alleen geen nieuwe openbaarmaking als het werk al vrij en rechtmatig op het open internet staat. Staat het bestand er alleen voor CN.nl, of achter een inlog, dan bereik je een nieuw publiek en is toestemming van de rechthebbende nodig.</p>
       </div>
     </div>
     <p class="takeaway">Dat iets technisch werkt, zegt niets over de juridische route. Daarom vraagt het <a href="https://claude.ai/artifact/F1HRxLwFM1q3NXegzsKrrM">stroomschema in de keuzehulp</a>: <strong>toont de bronhouder het werk zelf ook op diens eigen website?</strong></p>
@@ -203,14 +260,14 @@ a { color: var(--accent); }
     </div>
     <ol class="chain">
       <li><strong>Bronhouder</strong><span>Publiceert de collectie als dataset en meldt die aan bij het register.</span></li>
-      <li><strong>Datasetregister</strong><span>Beschrijft welke datasets er zijn en waar ze staan. Beheerd door NDE: <a href="https://datasetregister.netwerkdigitaalerfgoed.nl/">datasetregister.netwerkdigitaalerfgoed.nl</a>.</span></li>
-      <li><strong>Collectie Nederland</strong><span>Vindt de dataset via het register en haalt de data op bij de bronhouder.</span></li>
+      <li><strong>Datasetregister</strong><span>Beschrijft welke datasets er zijn en waar ze staan. Beheerd door <a href="https://datasetregister.netwerkdigitaalerfgoed.nl/">NDE</a>.</span></li>
+      <li><strong>CN.nl</strong><span>Vindt de dataset via het register en haalt de data op bij de bronhouder.</span></li>
       <li><strong>Record met beeld-URL</strong><span>Per object een MediaObject met de URL van het beeld en, volgens SCHEMA-AP-NDE, een verplichte licentie. De waarden staan in de RCE-thesaurus <a href="https://data.cultureelerfgoed.nl/rights.html">Rechtenstatus en gebruiksrechten</a>.</span></li>
       <li><strong>Browser van de bezoeker</strong><span>Haalt het beeld via die URL bij de bronhouder op. Dat is embedden.</span></li>
     </ol>
     <div class="open">
-      <h3>Open voor het overleg</h3>
-      <p>Art. 2.2 lid 2 Rbr verplicht beheerders aan te sluiten op “het geautomatiseerde systeem van de minister”. Is dat het datasetregister, Collectie Nederland, of de combinatie? Dat is geen technische vraag, maar het antwoord bepaalt wat de aansluitplicht inhoudt.</p>
+      <h3>Nog open</h3>
+      <p>Art. 2.2 lid 2 Rbr verplicht beheerders aan te sluiten op “het geautomatiseerde systeem van de minister”. Is dat het datasetregister, CN.nl, of de combinatie? Dat is geen technische vraag, maar het antwoord bepaalt wat de aansluitplicht inhoudt.</p>
     </div>
   </section>
 
@@ -220,18 +277,51 @@ a { color: var(--accent); }
       <p>Voor bronhouders die hun collectie (nog) niet als Linked Data via het datasetregister kunnen leveren.</p>
     </div>
     <ol class="chain">
-      <li><strong>Huidige data</strong><span>De records zoals ze nu op Collectie Nederland staan.</span></li>
+      <li><strong>Huidige data</strong><span>De records zoals ze nu op CN.nl staan.</span></li>
       <li><strong>Eenmalige omzetting</strong><span>RCE zet de data om naar het nieuwe datamodel, inclusief normalisatie van het rechtenveld.</span></li>
       <li><strong>Statische dataset</strong><span>Blijft staan tot uiterlijk 2030, of tot de bronhouder zelf via het register levert.</span></li>
       <li><strong>Beeld bij de bronhouder</strong><span>Het bevroren record verwijst naar een URL bij de bronhouder. Dat is embedden: RCE slaat geen beelden op.</span></li>
     </ol>
     <div class="open">
       <h3>Let op</h3>
-      <p>Bevroren records volgen de bron maar half. Haalt een bronhouder een beeld weg, dan verdwijnt het ook op Collectie Nederland, want het record verwijst ernaar. Past de bronhouder de rechten aan, dan verandert het bevroren record niet mee. Een record verwijderen na een melding moet RCE dan zelf regelen; dat raakt de plicht uit de DSA om prompt te handelen. Volgens de Q&A bij het rapport volstaat voor deze bronhouders een brief die uitlegt wat de freeze technisch doet.</p>
+      <p>Bevroren records volgen de bron maar half. Haalt een bronhouder een beeld weg, dan verdwijnt het ook op CN.nl, want het record verwijst ernaar. Past de bronhouder de rechten aan, dan verandert het bevroren record niet mee. Een record verwijderen na een melding moet RCE dan zelf regelen; dat raakt de plicht uit de DSA om prompt te handelen. Volgens de Q&A bij het rapport volstaat voor deze bronhouders een brief die uitlegt wat de freeze technisch doet.</p>
     </div>
     <div class="open">
       <h3>Nog open</h3>
-      <p>Beelden die op de MediaManager staan, worden niet omgezet. Wat toont Collectie Nederland bij de records van die bronhouders?</p>
+      <p>Beelden die op de MediaManager staan, worden niet omgezet. Wat toont CN.nl bij de records van die bronhouders?</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="kc-h">
+    <div class="sec-head">
+      <h2 id="kc-h">De RCE-Kunstcollectie via de LDV</h2>
+      <p>Voor haar eigen Kunstcollectie publiceert de RCE zelf, volgens de RCE-architectuur en de DERA-richtlijnen. CN.nl gebruikt die publicatie, net als bij andere bronhouders.</p>
+    </div>
+    <ol class="chain">
+      <li><strong>Axiell Collections</strong><span>Het beheersysteem van de Kunstcollectie. Hieruit komen de beschrijvingen.</span></li>
+      <li><strong>Linked Data Voorziening (LDV)</strong><span>De RCE publiceert de openbare Kunstcollectie-data als open data, zonder inlog. Bij elk object staat de URI van de afbeelding; de LDV toont beschrijving en afbeelding samen.</span></li>
+      <li><strong>NDE-datasetregister</strong><span>De RCE meldt de dataset aan. CN.nl vindt hem hier.</span></li>
+      <li><strong>CN.nl</strong><span>Embedt de afbeelding vanaf dezelfde RCE-URI. Er wordt geen kopie gemaakt.</span></li>
+    </ol>
+    <p class="takeaway">De afbeeldingen blijven in het beeldarchief (DAM) van de RCE staan, met hun huidige publieke URI’s. Voor de bezoeker kan zichtbaar worden gemaakt dat het beeld van de RCE komt.</p>
+    <div class="split">
+      <div class="verdict">
+        <h3>Waarom niet via de Beeldbank</h3>
+        <p>De nieuwe Beeldbank kan de beschrijvingen niet zonder maatwerk uit Axiell Collections ophalen. Het zou een tweede, afwijkende publicatieroute voor één collectie worden, met extra kosten en beheer. Afwijken van de DERA vraagt bovendien een onderbouwde comply-or-explain richting OCW.</p>
+      </div>
+      <div class="verdict">
+        <h3>Waarom de LDV</h3>
+        <p>De collectie wordt op één plek gepubliceerd, op dezelfde manier als andere RCE-collecties. De route is technisch al ingericht en wordt automatisch bijgewerkt. Er is geen maatwerk van een leverancier nodig.</p>
+      </div>
+    </div>
+    <div class="open">
+      <h3>Ter toetsing</h3>
+      <p>De vragen:</p>
+      <ul>
+        <li>Geldt de publicatie via de LDV als openbaarmaking door de RCE, zodat CN.nl de beelden daarna mag embedden?</li>
+        <li>Hoe maakt CN.nl voor de bezoeker duidelijk dat het beeld van de RCE komt?</li>
+        <li>Moet onderscheid worden gemaakt tussen het auteursrecht op het werk, de rechten op de afbeelding en de technische manier van beschikbaar stellen?</li>
+      </ul>
     </div>
   </section>
 
@@ -245,10 +335,10 @@ a { color: var(--accent); }
         <thead><tr><th scope="col">Begrip</th><th scope="col">Betekenis</th><th scope="col">Waar het misgaat</th></tr></thead>
         <tbody>
           <tr><td>Bronbestand</td><td>Het beeldbestand op een URL bij de bronhouder</td><td>Iets anders dan de bronpagina, de webpagina waarop het beeld getoond wordt</td></tr>
-          <tr><td>Embedden</td><td>Collectie Nederland toont het bronbestand; de browser haalt het bij de bronhouder op</td><td>Er is geen zichtbaar venster; de bezoeker ziet het verschil niet</td></tr>
-          <tr><td>Framen</td><td>De hele bronpagina in een venster op Collectie Nederland</td><td></td></tr>
+          <tr><td>Embedden</td><td>CN.nl toont het bronbestand; de browser haalt het bij de bronhouder op</td><td>Er is geen zichtbaar venster; de bezoeker ziet het verschil niet</td></tr>
+          <tr><td>Framen</td><td>De hele bronpagina in een venster op CN.nl</td><td></td></tr>
           <tr><td>Bronhouder</td><td>De instelling die collectiegegevens en beelden levert; bij de rijkscollectie ook de beheerder van de rijkscollectie</td><td>Is niet altijd de rechthebbende</td></tr>
-          <tr><td>Hosten</td><td>RCE heeft een kopie van de afbeelding op haar server en zet die online op CollectieNederland.nl. Kopiëren en online zetten zijn auteursrechtelijke handelingen</td><td>Ook een ingehuurde leverancier telt: RCE verricht de handeling en is zonder toestemming volledig aansprakelijk</td></tr>
+          <tr><td>Hosten</td><td>RCE heeft een kopie van de afbeelding op haar server en zet die online op CN.nl. Kopiëren en online zetten zijn auteursrechtelijke handelingen</td><td>Ook een ingehuurde leverancier telt: RCE verricht de handeling en is zonder toestemming volledig aansprakelijk</td></tr>
           <tr><td>Hosten op verzoek</td><td>Hosten in opdracht van de bronhouder, met mogelijk de hostingvrijstelling uit art. 6 DSA</td><td>Iets anders dan zelf hosten; of de vrijstelling opgaat voor rijksmusea is onzeker</td></tr>
           <tr><td>Cachen</td><td>Een tijdelijke, ongewijzigde kopie tijdens een technisch proces, daarna weg</td><td>Een cache om later aan bezoekers te tonen is geen cachen meer</td></tr>
           <tr><td>Thumbnail</td><td>Een verkleinde kopie die wordt opgeslagen</td><td>Juridisch hosten, ook als het grote beeld geëmbed wordt</td></tr>
@@ -268,13 +358,13 @@ a { color: var(--accent); }
       <p>Vier van de zes zijn (deels) beantwoord.</p>
     </div>
     <ol class="questions">
-      <li><span class="q">Toont het nieuwe Collectie Nederland eigen thumbnails, of embedt het ook de kleine versies bij de bronhouder?</span>
-        <span class="a"><span class="chip tone-ok">Beantwoord</span> Collectie Nederland embedt, ook de kleine versies. Er komen geen eigen thumbnails.</span></li>
+      <li><span class="q">Toont het nieuwe CN.nl eigen thumbnails, of embedt het ook de kleine versies bij de bronhouder?</span>
+        <span class="a"><span class="chip tone-ok">Beantwoord</span> CN.nl embedt, ook de kleine versies. Er komen geen eigen thumbnails.</span></li>
       <li><span class="q">Worden beelden uit de MediaManager overgezet, en zo ja, voor welke collecties?</span>
-        <span class="a"><span class="chip tone-ok">Beantwoord</span> Nee, beelden op de MediaManager worden niet omgezet. Nog open: wat Collectie Nederland dan bij die records toont.</span></li>
+        <span class="a"><span class="chip tone-ok">Beantwoord</span> Nee, beelden op de MediaManager worden niet omgezet. Nog open: wat CN.nl dan bij die records toont.</span></li>
       <li><span class="q">Verwijzen bevroren records naar beelden bij de bronhouder, of naar kopieën?</span>
         <span class="a"><span class="chip tone-ok">Beantwoord</span> Naar de beelden bij de bronhouder. Dat is embedden.</span></li>
-      <li><span class="q">Hoe verwerkt Collectie Nederland een melding van inbreuk, ook voor bevroren data?</span>
+      <li><span class="q">Hoe verwerkt CN.nl een melding van inbreuk, ook voor bevroren data?</span>
         <span class="a"><span class="chip tone-warn">Nog open</span></span></li>
       <li><span class="q">Welk onderdeel is “het systeem van de minister” uit de Rbr?</span>
         <span class="a"><span class="chip tone-warn">Nog open</span></span></li>
@@ -293,7 +383,7 @@ a { color: var(--accent); }
 // Vier routes: waar staat het bestand, en welke verzoeken doet de browser van de bezoeker?
 const ROUTES = [
   {
-    name: "Embedden", tone: ["ok", "Laag risico"], file: ["bron"], site: true,
+    name: "Embedden", tone: ["ok", "Zeer laag risico"], file: ["bron"], site: true, cn: true,
     arrows: [["cn", "1. pagina"], ["bron", "2. beeld"]],
     facts: [
       ["Bestand staat", "Bij de bronhouder; RCE slaat niets op"],
@@ -302,13 +392,14 @@ const ROUTES = [
     ]
   },
   {
-    name: "Framen", tone: ["ok", "Laag risico"], file: ["bron"], frame: true, site: true,
+    name: "Framen", tone: ["ok", "Zeer laag risico"], file: ["bron"], frame: true, site: true,
     arrows: [["cn", "1. pagina"], ["bron", "2. bronpagina"]],
     facts: [
       ["Bestand staat", "Bij de bronhouder; RCE slaat niets op"],
       ["Handeling RCE", "Geen verveelvoudiging of openbaarmaking"],
       ["Voorwaarde", "De bronpagina laat framen toe"]
-    ]
+    ],
+    note: "CN.nl framet niet, maar embedt."
   },
   {
     name: "Eigen thumbnails", tone: ["stop", "Middelmatig-hoog"], file: ["cn-small", "bron"], site: true,
@@ -318,7 +409,7 @@ const ROUTES = [
       ["Handeling RCE", "Verveelvoudiging en bewerking"],
       ["Voorwaarde", "Toestemming die de thumbnails expliciet noemt"]
     ],
-    note: "Niet gepland: Collectie Nederland embedt ook de kleine versies bij de bronhouder."
+    note: "CN.nl embedt ook de kleine versies bij de bronhouder."
   },
   {
     name: "Hosten", tone: ["stop", "Toestemming nodig"], file: ["cn"], idleBron: true,
@@ -327,13 +418,14 @@ const ROUTES = [
       ["Bestand staat", "Bij RCE of haar leverancier"],
       ["Handeling RCE", "Verveelvoudiging en openbaarmaking"],
       ["Voorwaarde", "Toestemming, of hosten op verzoek (art. 6 DSA, onzeker voor rijksmusea)"]
-    ]
+    ],
+    note: "CN.nl slaat geen beelden op."
   }
 ];
 
 const BOX = {
   you: { x: 6, y: 78, w: 96, h: 60, t: "Bezoeker", s: "browser" },
-  cn: { x: 196, y: 8, w: 158, h: 64, t: "Collectie Nederland", s: "server RCE" },
+  cn: { x: 196, y: 8, w: 158, h: 64, t: "CN.nl", s: "server RCE" },
   bron: { x: 196, y: 144, w: 158, h: 64, t: "Bronhouder", s: "server bronhouder" }
 };
 
@@ -392,7 +484,8 @@ function flowSvg(r, i) {
 }
 
 document.getElementById("routes").innerHTML = ROUTES.map((r, i) => `
-  <article class="route">
+  <article class="route${r.cn ? " is-cn" : ""}">
+    <span class="flag">${r.cn ? "Zo werkt CN.nl" : "Niet voor CN.nl"}</span>
     <div class="route-top"><h3>${r.name}</h3><span class="chip tone-${r.tone[0]}">${r.tone[1]}</span></div>
     ${flowSvg(r, i)}
     <dl class="facts">${r.facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
